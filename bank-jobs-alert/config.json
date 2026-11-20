@@ -1,0 +1,102 @@
+{
+  "window_hours": 36,
+  "window_hours_monday": 84,
+  "max_items_per_group": 12,
+  "max_items_per_bank": 2,
+  "show_other_banks": true,
+  "repeat_days": 30,
+  "bank_quiet_days": 5,
+  "pause_seconds": 3,
+  "queries": [
+    "bank recruitment {year} notification apply online when:{days}d",
+    "bank vacancy {year} apply online when:{days}d",
+    "(SBI OR IBPS OR RBI OR NABARD OR SIDBI) recruitment notification when:{days}d",
+    "(\"Bank of Baroda\" OR \"Punjab National Bank\" OR \"Canara Bank\" OR \"Union Bank of India\" OR \"Indian Bank\" OR \"Bank of India\") recruitment when:{days}d",
+    "(\"Central Bank of India\" OR \"UCO Bank\" OR \"Bank of Maharashtra\" OR \"Indian Overseas Bank\" OR \"Punjab & Sind Bank\" OR \"India Post Payments Bank\" OR \"Gramin Bank\") recruitment when:{days}d",
+    "(\"HDFC Bank\" OR \"ICICI Bank\" OR \"Axis Bank\" OR \"Kotak Mahindra Bank\" OR \"IndusInd Bank\" OR \"IDFC FIRST Bank\" OR \"Yes Bank\") (recruitment OR hiring OR hire) when:{days}d",
+    "(\"Federal Bank\" OR \"South Indian Bank\" OR \"Karur Vysya Bank\" OR \"Karnataka Bank\" OR \"City Union Bank\" OR \"J&K Bank\" OR \"IDBI Bank\" OR \"Bandhan Bank\" OR \"RBL Bank\") recruitment when:{days}d",
+    "(\"small finance bank\" OR \"cooperative bank\" OR \"co-operative bank\") recruitment notification when:{days}d"
+  ],
+  "job_words": [
+    "recruitment", "vacancy", "vacancies", "apply online", "apply for", "apply now",
+    "hiring", "to hire", "apprentice", "apprentices", "walk-in"
+  ],
+  "soft_words": ["notification", "registration", "openings"],
+  "drop_words": [
+    "admit card", "call letter", "hall ticket", "result", "results", "cut off", "cutoff",
+    "cut-off", "syllabus", "answer key", "score card", "scorecard", "merit list",
+    "waiting list", "exam analysis", "exam pattern", "exam schedule", "exam date out",
+    "exam date released", "exam date announced", "interview schedule", "previous year",
+    "mock test", "preparation", "expected", "postponed", "cancelled", "canceled", "strike",
+    "ceo", "chairman", "headhunter", "appoints", "appointed", "sensex", "nifty",
+    "share price", "court", "arrested", "fake", "fraud", "scam"
+  ],
+  "not_banks": [
+    "SBI Life", "SBI Card", "SBI Cards", "SBI General", "SBI Mutual Fund", "SBI Funds",
+    "SBI Securities", "SBI Capital", "HDFC Life", "World Bank", "Asian Development Bank",
+    "New Development Bank", "Blood Bank", "Bank Note Press", "Bank Holiday", "Bank Holidays"
+  ],
+  "not_name_words": [
+    "latest", "new", "big", "top", "upcoming", "all", "govt", "government", "private",
+    "public", "sector", "psu", "best", "various", "other", "major", "leading", "for", "in",
+    "at", "the", "a", "an", "of", "and", "to", "by", "from", "with", "on", "out", "online",
+    "apply", "notification", "recruitment", "vacancy", "vacancies", "job", "jobs", "news",
+    "this", "these", "check", "how", "why", "what", "which", "is", "are", "has", "have",
+    "india", "indian", "national", "rural", "regional"
+  ],
+  "banks": {
+    "government": [
+      ["Reserve Bank of India", "RBI"],
+      ["State Bank of India", "SBI"],
+      ["IBPS"],
+      ["NABARD"],
+      ["SIDBI"],
+      ["NaBFID"],
+      ["EXIM Bank", "Export-Import Bank of India"],
+      ["National Housing Bank", "NHB"],
+      ["Central Bank of India", "Central Bank"],
+      ["Union Bank of India", "Union Bank", "UBI"],
+      ["Bank of Baroda", "BOB"],
+      ["Punjab National Bank", "PNB"],
+      ["Canara Bank"],
+      ["Bank of Maharashtra", "BOM"],
+      ["Indian Overseas Bank", "IOB"],
+      ["UCO Bank"],
+      ["Punjab & Sind Bank", "Punjab and Sind Bank"],
+      ["India Post Payments Bank", "IPPB"],
+      ["Bank of India", "BOI"],
+      ["Indian Bank"]
+    ],
+    "private": [
+      ["HDFC Bank"],
+      ["ICICI Bank"],
+      ["Axis Bank"],
+      ["Kotak Mahindra Bank", "Kotak Bank"],
+      ["IndusInd Bank"],
+      ["IDFC FIRST Bank"],
+      ["Yes Bank"],
+      ["Federal Bank"],
+      ["South Indian Bank"],
+      ["Karur Vysya Bank", "KVB"],
+      ["Karnataka Bank"],
+      ["City Union Bank"],
+      ["Tamilnad Mercantile Bank", "TMB"],
+      ["J&K Bank", "JK Bank", "Jammu and Kashmir Bank", "Jammu & Kashmir Bank"],
+      ["IDBI Bank", "IDBI"],
+      ["RBL Bank"],
+      ["Bandhan Bank"],
+      ["DCB Bank"],
+      ["CSB Bank"],
+      ["Dhanlaxmi Bank"],
+      ["Nainital Bank"]
+    ]
+  },
+  "bank_kinds": {
+    "government": [
+      "Grameena Vikas Bank", "Gramin Vikas Bank", "Gramin Bank", "Grameen Bank",
+      "Grameena Bank", "Regional Rural Bank"
+    ],
+    "private": ["Small Finance Bank", "Payments Bank"],
+    "other": ["Co-operative Bank", "Cooperative Bank", "Sahakari Bank", "Apex Bank", "Bank"]
+  }
+}

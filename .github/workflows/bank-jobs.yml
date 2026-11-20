@@ -1,0 +1,55 @@
+name: Bank Jobs Alert
+
+on:
+  schedule:
+    # 02:45 UTC is 08:15 AM in India (IST). GitHub can start a few minutes late.
+    - cron: "45 2 * * *"
+  workflow_dispatch:   # adds a "Run workflow" button, to run it by hand
+
+permissions:
+  contents: write   # to save the alert in this repository
+  issues: write     # to open the issue that GitHub emails to you
+
+# The same group as the AI Updates Digest, so the two jobs never save at the same moment.
+concurrency:
+  group: ai-updates-digest
+  cancel-in-progress: false
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
+      TZ: Asia/Kolkata
+      APP_DIR: bank-jobs-alert
+      # "true": each alert is opened as an issue and GitHub emails it to you.
+      # Set it to "false" to stop these issues.
+      NOTIFY_BY_ISSUE: "true"
+    steps:
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_REF_NAME}"
+          git checkout -q -B "${GITHUB_REF_NAME}" FETCH_HEAD
+
+      - name: Collect the bank job notices and build the alert
+        run: python3 "${APP_DIR}/bank_jobs.py"
+
+      - name: Save the alert in this repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "${APP_DIR}/out"
+          if git diff --cached --quiet; then
+            echo "Nothing new to save."
+          else
+            git commit -q -m "Bank Jobs Alert $(date +%F)"
+            git push -q origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Email the alert to you through a GitHub issue
+        if: env.NOTIFY_BY_ISSUE == 'true'
+        run: python3 cloud/post_issue.py
