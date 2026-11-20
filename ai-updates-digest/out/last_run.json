@@ -1,0 +1,160 @@
+{
+  "version": "1.0",
+  "finished": "2026-11-20T16:08:12+00:00",
+  "python": "3.12.10",
+  "system": "Windows-11-10.0.26300-SP0",
+  "window_hours": 36.0,
+  "total_items": 25,
+  "sections": {
+    "releases": 4,
+    "tools": 5,
+    "community": 5,
+    "code": 5,
+    "integration": 6
+  },
+  "sources": [
+    {
+      "source": "Hacker News",
+      "ok": true,
+      "optional": false,
+      "fetched": 16,
+      "kept": 3,
+      "seconds": 1.6
+    },
+    {
+      "source": "DEV Community",
+      "ok": false,
+      "optional": false,
+      "fetched": 0,
+      "kept": 0,
+      "error": "HTTP 403 Forbidden Bots",
+      "seconds": 0.1
+    },
+    {
+      "source": "GitHub",
+      "ok": true,
+      "optional": false,
+      "fetched": 69,
+      "kept": 11,
+      "seconds": 17.7
+    },
+    {
+      "source": "OpenAI",
+      "ok": true,
+      "optional": false,
+      "fetched": 1418,
+      "kept": 1,
+      "seconds": 0.4
+    },
+    {
+      "source": "Google AI",
+      "ok": true,
+      "optional": false,
+      "fetched": 20,
+      "kept": 2,
+      "seconds": 0.5
+    },
+    {
+      "source": "Google DeepMind",
+      "ok": true,
+      "optional": false,
+      "fetched": 100,
+      "kept": 0,
+      "seconds": 0.7
+    },
+    {
+      "source": "Microsoft AI news",
+      "ok": true,
+      "optional": false,
+      "fetched": 10,
+      "kept": 0,
+      "seconds": 0.4
+    },
+    {
+      "source": "Mistral AI",
+      "ok": true,
+      "optional": false,
+      "fetched": 94,
+      "kept": 0,
+      "seconds": 0.4
+    },
+    {
+      "source": "Hugging Face",
+      "ok": true,
+      "optional": false,
+      "fetched": 914,
+      "kept": 1,
+      "seconds": 0.8
+    },
+    {
+      "source": "Anthropic news (community feed)",
+      "ok": true,
+      "optional": true,
+      "fetched": 290,
+      "kept": 0,
+      "seconds": 0.4
+    },
+    {
+      "source": "Simon Willison",
+      "ok": true,
+      "optional": false,
+      "fetched": 30,
+      "kept": 2,
+      "seconds": 0.6
+    },
+    {
+      "source": "Reddit r/LocalLLaMA",
+      "ok": false,
+      "optional": true,
+      "fetched": 0,
+      "kept": 0,
+      "error": "HTTP 404 Not Found",
+      "seconds": 0.3
+    },
+    {
+      "source": "Azure Integration Services blog",
+      "ok": true,
+      "optional": false,
+      "fetched": 20,
+      "kept": 1,
+      "seconds": 0.4
+    },
+    {
+      "source": "Azure updates",
+      "ok": true,
+      "optional": false,
+      "fetched": 25,
+      "kept": 1,
+      "seconds": 1.1
+    },
+    {
+      "source": "News: Logic Apps and AI",
+      "ok": true,
+      "optional": true,
+      "fetched": 1,
+      "kept": 1,
+      "seconds": 0.5
+    },
+    {
+      "source": "News: SAP Integration Suite and AI",
+      "ok": true,
+      "optional": true,
+      "fetched": 3,
+      "kept": 1,
+      "seconds": 0.5
+    },
+    {
+      "source": "News: TIBCO, MuleSoft and AI",
+      "ok": true,
+      "optional": true,
+      "fetched": 8,
+      "kept": 1,
+      "seconds": 0.5
+    }
+  ],
+  "digest_file": "C:\\Users\\sande\\ai-updates-digest\\ai-updates-digest\\out\\digest-2026-11-20.html",
+  "email": {
+    "attempted": false,
+    "sent": false
+  }
+}

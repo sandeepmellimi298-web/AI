@@ -1,0 +1,13 @@
+# Gmail settings for the AI Updates Digest. Keep this file private.
+#
+# 1. Turn on 2-Step Verification for the Google account.
+# 2. Create an app password at https://myaccount.google.com/apppasswords
+# 3. Paste the 16 characters after GMAIL_APP_PASSWORD= and save this file.
+# 4. Double-click test_email.bat to check that it works.
+
+GMAIL_ADDRESS=Sandeepmellimi298@gmail.com
+GMAIL_APP_PASSWORD=
+SEND_TO=Sandeepmellimi298@gmail.com
+
+# Only if this computer needs a proxy to reach the internet:
+# HTTPS_PROXY=http://proxy-host:8080

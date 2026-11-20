@@ -1,0 +1,269 @@
+{
+  "window_hours": 36,
+  "window_hours_monday": 84,
+  "max_items_per_section": 5,
+  "max_items_by_section": {
+    "integration": 6
+  },
+  "skip_items_sent_in_last_days": 30,
+  "exclude_terms": {
+    "acronyms": [
+      "IPO"
+    ],
+    "words": [
+      "initial public offering",
+      "funding round",
+      "valuation",
+      "share price",
+      "stock price",
+      "Series A",
+      "Series B",
+      "Series C",
+      "earnings call"
+    ]
+  },
+  "ai_terms": {
+    "acronyms": [
+      "AI",
+      "A.I.",
+      "LLM",
+      "LLMs",
+      "GPT",
+      "RAG",
+      "MCP",
+      "AGI",
+      "ML"
+    ],
+    "words": [
+      "OpenAI",
+      "Anthropic",
+      "Claude",
+      "ChatGPT",
+      "Gemini",
+      "DeepMind",
+      "Mistral",
+      "Llama",
+      "Qwen",
+      "DeepSeek",
+      "Copilot",
+      "Codex",
+      "Grok",
+      "Hugging Face",
+      "LangChain",
+      "Ollama",
+      "agent",
+      "agents",
+      "agentic",
+      "language model",
+      "language models",
+      "machine learning",
+      "deep learning",
+      "neural network",
+      "neural networks",
+      "diffusion model",
+      "fine-tuning",
+      "fine-tune",
+      "prompt injection",
+      "prompt engineering",
+      "embeddings",
+      "inference",
+      "chatbot",
+      "chatbots",
+      "generative",
+      "vibe coding",
+      "Stable Diffusion"
+    ]
+  },
+  "hacker_news": {
+    "enabled": true,
+    "min_points": 80,
+    "min_points_show_hn": 30
+  },
+  "devto": {
+    "enabled": true,
+    "tags": [
+      "ai",
+      "llm"
+    ],
+    "min_reactions": 20
+  },
+  "github": {
+    "enabled": true,
+    "pause_seconds": 2,
+    "queries": [
+      {
+        "section": "tools",
+        "name": "GitHub (new and rising)",
+        "rank": "stars_per_day",
+        "min_age_days": 3,
+        "q": "llm OR agent OR mcp in:name,description created:>{d30} stars:>500"
+      },
+      {
+        "section": "tools",
+        "name": "GitHub (new and rising)",
+        "rank": "stars_per_day",
+        "min_age_days": 3,
+        "q": "topic:ai-agents created:>{d30} stars:>300"
+      },
+      {
+        "section": "code",
+        "name": "GitHub (new reusable code)",
+        "rank": "stars_per_day",
+        "min_age_days": 3,
+        "q": "skills agent in:name,description created:>{d90} stars:>1000"
+      },
+      {
+        "section": "code",
+        "name": "GitHub (popular templates)",
+        "rank": "stars",
+        "q": "topic:llm template OR cookbook OR examples OR starter in:name,description pushed:>{d7} stars:>1000"
+      },
+      {
+        "section": "integration",
+        "name": "GitHub (Azure Logic Apps)",
+        "rank": "stars",
+        "q": "org:Azure logicapps in:name pushed:>{d30}"
+      },
+      {
+        "section": "integration",
+        "name": "GitHub (Azure AI samples)",
+        "rank": "stars",
+        "q": "org:Azure-Samples agent OR openai OR foundry in:name,description pushed:>{d14} stars:>200"
+      }
+    ]
+  },
+  "feeds": [
+    {
+      "name": "OpenAI",
+      "section": "releases",
+      "max_items": 2,
+      "urls": [
+        "https://openai.com/news/rss.xml"
+      ]
+    },
+    {
+      "name": "Google AI",
+      "section": "releases",
+      "max_items": 2,
+      "urls": [
+        "https://blog.google/innovation-and-ai/technology/ai/rss/"
+      ]
+    },
+    {
+      "name": "Google DeepMind",
+      "section": "releases",
+      "max_items": 2,
+      "urls": [
+        "https://deepmind.google/blog/rss.xml"
+      ]
+    },
+    {
+      "name": "Microsoft AI news",
+      "section": "releases",
+      "max_items": 2,
+      "urls": [
+        "https://news.microsoft.com/source/topics/ai/feed/"
+      ]
+    },
+    {
+      "name": "Mistral AI",
+      "section": "releases",
+      "max_items": 2,
+      "urls": [
+        "https://mistral.ai/news/rss"
+      ]
+    },
+    {
+      "name": "Hugging Face",
+      "section": "releases",
+      "max_items": 2,
+      "urls": [
+        "https://huggingface.co/blog/feed.xml"
+      ]
+    },
+    {
+      "name": "Anthropic news (community feed)",
+      "section": "releases",
+      "max_items": 2,
+      "optional": true,
+      "urls": [
+        "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml"
+      ]
+    },
+    {
+      "name": "Simon Willison",
+      "section": "community",
+      "max_items": 2,
+      "urls": [
+        "https://simonwillison.net/atom/everything/"
+      ]
+    },
+    {
+      "name": "Reddit r/LocalLLaMA",
+      "section": "community",
+      "max_items": 2,
+      "optional": true,
+      "urls": [
+        "https://www.reddit.com/r/LocalLLaMA/top/.rss?t=day"
+      ]
+    },
+    {
+      "name": "Azure Integration Services blog",
+      "section": "integration",
+      "max_items": 3,
+      "window_hours": 96,
+      "urls": [
+        "https://techcommunity.microsoft.com/t5/s/gxcuf89792/rss/board?board.id=IntegrationsonAzureBlog",
+        "https://techcommunity.microsoft.com/gxcuf89792/rss/board?board.id=IntegrationsonAzureBlog"
+      ]
+    },
+    {
+      "name": "Azure updates",
+      "section": "integration",
+      "max_items": 3,
+      "window_hours": 96,
+      "include": [
+        "Logic Apps",
+        "API Management",
+        "Service Bus",
+        "Event Grid",
+        "Integration",
+        "Foundry",
+        "OpenAI"
+      ],
+      "urls": [
+        "https://www.microsoft.com/releasecommunications/api/v2/azure/rss"
+      ]
+    },
+    {
+      "name": "News: Logic Apps and AI",
+      "section": "integration",
+      "max_items": 2,
+      "window_hours": 96,
+      "optional": true,
+      "urls": [
+        "https://news.google.com/rss/search?q=%22Logic+Apps%22+AI+when:4d&hl=en-US&gl=US&ceid=US:en"
+      ]
+    },
+    {
+      "name": "News: SAP Integration Suite and AI",
+      "section": "integration",
+      "max_items": 1,
+      "window_hours": 168,
+      "optional": true,
+      "urls": [
+        "https://news.google.com/rss/search?q=%22SAP+Integration+Suite%22+AI+when:7d&hl=en-US&gl=US&ceid=US:en"
+      ]
+    },
+    {
+      "name": "News: TIBCO, MuleSoft and AI",
+      "section": "integration",
+      "max_items": 1,
+      "window_hours": 168,
+      "optional": true,
+      "urls": [
+        "https://news.google.com/rss/search?q=%28TIBCO+OR+MuleSoft%29+AI+agents+when:7d&hl=en-US&gl=US&ceid=US:en"
+      ]
+    }
+  ]
+}
