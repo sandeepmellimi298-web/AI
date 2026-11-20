@@ -11,7 +11,7 @@ import re
 import subprocess
 import sys
 
-OUT = pathlib.Path("out")
+OUT = pathlib.Path(os.environ.get("APP_DIR") or ".") / "out"
 ZERO_WIDTH_SPACE = chr(0x200B)
 
 
