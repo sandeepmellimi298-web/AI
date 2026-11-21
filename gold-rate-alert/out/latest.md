@@ -1,4 +1,4 @@
-# Gold 22K: ₹11,349 for 1 gram, ▼ ₹516 (Sat 21 Nov, 11:55 AM)
+# Gold 22K: ₹11,349 for 1 gram, no new rate (Sat 21 Nov, 7:06 PM)
 
 **22K gold, 1 gram: ₹11,349**, ▼ ₹516 (-4.35%) from the closing rate of Thursday 19 Nov
 
@@ -23,8 +23,16 @@ With 3% GST, 1 gram of 22K costs about ₹11,689. Making charges are extra. Shop
 - Why: the world gold price fell 1.4% after the last official rate.
 - Check: there is no record yet. The first estimates are rough.
 
+**Forecast for 7 days** (tested model)
+
+- Closing rate of Friday 27 Nov: 8 times out of 10 between ₹10,665 and ₹11,748 for 1 gram of 22K.
+- Chance that it is lower than the last official rate (₹11,349): about 65%. The world price already fell after that rate.
+- Market now: big swings. The world price moves about 1.7% a day; a normal day is 1.0%. In one week it fell 9.5%, in one month it fell 13.4%.
+- Test: on 649 past days that the model had not seen, the real price was inside the range 80% of the time.
+- The model gives a range, not a direction: in tests on 5 years of prices no model could say up or down better than chance.
+
 Today is Saturday. There is no new official rate on Saturday and Sunday, and the world gold market is closed. The next official rate comes on Monday 23 Nov at about 12 noon.
 
-The estimate is a simple calculation from the world gold price. Nobody can know the price in advance. It is not advice to buy or sell.
+The estimate and the forecast are calculations from world gold prices. Nobody can know the price in advance. They are not advice to buy or sell.
 
 Sources: [IBJA](https://ibjarates.com/) for the official rates of India, [xaus.com](https://xaus.com/) for the world gold price.
