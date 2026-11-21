@@ -1,6 +1,6 @@
 name: AI test (manual)
 
-# Tries the AI step on copies of the last saved digests.
+# Tries the AI step on copies of saved digests, and the check for scheduled starts.
 # Nothing is saved in the repository and no email is sent.
 on:
   workflow_dispatch:
@@ -19,26 +19,67 @@ jobs:
           git remote add origin "https://github.com/$GITHUB_REPOSITORY.git"
           git fetch -q --depth 1 origin "$GITHUB_REF_NAME"
           git checkout -q -B "$GITHUB_REF_NAME" FETCH_HEAD
+          cat > "$RUNNER_TEMP/try.sh" <<'TRY'
+          # try.sh <title> <app> [settings file]: run the AI step on a copy of the biggest
+          # saved digest of the app, and show the result as a notice on the page of the run.
+          set -euo pipefail
+          title="$1"; app="$2"; settings="${3:-$app/ai_settings.json}"
+          out="$(mktemp -d)"
+          cp -r "$app/out/." "$out/"
+          cp "$(ls -S "$out"/*-20*.md | head -n 1)" "$out/latest.md"
+          python3 "$app/ai_brief.py" --out "$out" --settings "$settings" > "$out/log.txt" 2>&1 || true
+          cat "$out/log.txt"
+          python3 - "$title" "$out" <<'PY'
+          import json, pathlib, sys
+          out = pathlib.Path(sys.argv[2])
+          text = (out / "latest.md").read_text(encoding="utf-8")
+          a, b = text.find("<!-- ai-brief:start -->"), text.find("<!-- ai-brief:end -->")
+          report = json.loads((out / "last_run.json").read_text(encoding="utf-8")).get("ai")
+          log = [line for line in (out / "log.txt").read_text(encoding="utf-8", errors="replace").splitlines() if "% of" not in line]
+          message = json.dumps(report) + "\n" + "\n".join(log) + "\n" + (text[a:b] if a >= 0 else "NO AI BLOCK")
+          print("::notice title=" + sys.argv[1] + "::" + message.replace("%", "%25").replace("\n", "%0A"))
+          PY
+          TRY
 
       - name: Start the small AI model (no account, no key)
         run: bash cloud/start_ai.sh
 
       - name: Try the AI step on both digests
         run: |
-          for app in bank-jobs-alert ai-updates-digest; do
-            cp -r "$app/out" "$RUNNER_TEMP/$app-out"
-            python3 "$app/ai_brief.py" --out "$RUNNER_TEMP/$app-out"
-            python3 -c 'import json,pathlib,sys; out=pathlib.Path(sys.argv[2]); t=(out/"latest.md").read_text(encoding="utf-8"); a=t.find("<!-- ai-brief:start -->"); b=t.find("<!-- ai-brief:end -->"); r=json.loads((out/"last_run.json").read_text(encoding="utf-8")).get("ai"); m=json.dumps(r)+"\n"+(t[a:b] if a>=0 else "NO AI BLOCK"); print(m); print("::notice title=AI test "+sys.argv[1]+"::"+m.replace("%","%25").replace("\n","%0A"))' "$app" "$RUNNER_TEMP/$app-out"
-          done
+          bash "$RUNNER_TEMP/try.sh" "AI test bank-jobs-alert" bank-jobs-alert
+          bash "$RUNNER_TEMP/try.sh" "AI test ai-updates-digest" ai-updates-digest
 
-      # On a computer the program downloads a missing model by itself (after a question).
+      # On a computer the program can download a missing model by itself.
       # Here the models are removed first, so that this download is tried for real.
       - name: Try the download that the program does on a computer
         run: |
           BIN="$(find "$RUNNER_TEMP/ollama" -maxdepth 3 -type f -name ollama | head -n 1)"
           "$BIN" rm phi4-mini all-minilm
-          cp -r bank-jobs-alert/out "$RUNNER_TEMP/pull-out"
-          python3 -c 'import json,sys; s=json.load(open("bank-jobs-alert/ai_settings.json", encoding="utf-8")); s["download_missing_models"]=True; json.dump(s, open(sys.argv[1], "w", encoding="utf-8"))' "$RUNNER_TEMP/pull-settings.json"
-          python3 bank-jobs-alert/ai_brief.py --out "$RUNNER_TEMP/pull-out" --settings "$RUNNER_TEMP/pull-settings.json" > "$RUNNER_TEMP/pull-log.txt" 2>&1 || true
-          cat "$RUNNER_TEMP/pull-log.txt"
-          python3 -c 'import sys; m=open(sys.argv[1], encoding="utf-8", errors="replace").read()[-1800:]; print("::notice title=AI test download::"+m.replace("%","%25").replace("\n","%0A"))' "$RUNNER_TEMP/pull-log.txt"
+          python3 -c 'import json,sys; s=json.load(open("bank-jobs-alert/ai_settings.json", encoding="utf-8")); s["download_missing_models"]=True; s["other_chat_models"]=[]; json.dump(s, open(sys.argv[1], "w", encoding="utf-8"))' "$RUNNER_TEMP/pull-settings.json"
+          bash "$RUNNER_TEMP/try.sh" "AI test download" bank-jobs-alert "$RUNNER_TEMP/pull-settings.json"
+
+      # A computer that has the model llama3.2 and not phi4-mini: llama3.2 must be used,
+      # only the small helper model is downloaded, and nobody is asked.
+      - name: Try a computer that has llama3.2 only
+        run: |
+          BIN="$(find "$RUNNER_TEMP/ollama" -maxdepth 3 -type f -name ollama | head -n 1)"
+          "$BIN" pull llama3.2
+          "$BIN" rm phi4-mini all-minilm
+          "$BIN" list
+          bash "$RUNNER_TEMP/try.sh" "AI test llama3.2 bank-jobs-alert" bank-jobs-alert
+          bash "$RUNNER_TEMP/try.sh" "AI test llama3.2 ai-updates-digest" ai-updates-digest
+
+      - name: Try the check for scheduled starts
+        run: |
+          {
+            for app in bank-jobs-alert ai-updates-digest; do
+              echo "$app, as a scheduled start now: $(GITHUB_OUTPUT=/dev/null GITHUB_EVENT_NAME=schedule APP_DIR="$app" python3 cloud/should_run.py)"
+              echo "$app, as a start by hand: $(GITHUB_OUTPUT=/dev/null GITHUB_EVENT_NAME=workflow_dispatch APP_DIR="$app" python3 cloud/should_run.py)"
+            done
+            mkdir -p "$RUNNER_TEMP/old/out"
+            echo '{"finished": "2026-11-20T02:24:00+00:00"}' > "$RUNNER_TEMP/old/out/last_run.json"
+            echo "an old report, as a scheduled start: $(GITHUB_OUTPUT=/dev/null GITHUB_EVENT_NAME=schedule APP_DIR="$RUNNER_TEMP/old" python3 cloud/should_run.py)"
+            echo "last run of the bank job: $(python3 -c 'import json; print(json.load(open("bank-jobs-alert/out/last_run.json"))["finished"])'), time now: $(date -u +%FT%TZ)"
+          } > "$RUNNER_TEMP/check.txt"
+          cat "$RUNNER_TEMP/check.txt"
+          python3 -c 'import sys; m=open(sys.argv[1], encoding="utf-8").read(); print("::notice title=AI test check for scheduled starts::"+m.replace("%","%25").replace("\n","%0A"))' "$RUNNER_TEMP/check.txt"

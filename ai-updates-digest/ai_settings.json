@@ -2,6 +2,7 @@
   "enabled": true,
   "ollama_url": "http://127.0.0.1:11434",
   "chat_model": "phi4-mini",
+  "other_chat_models": ["llama3.2"],
   "embed_model": "all-minilm",
   "download_missing_models": "ask",
   "top_picks": 5,

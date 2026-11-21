@@ -7,8 +7,11 @@ about each of them at the top. It works for the AI Updates Digest and for the
 Bank Jobs Alert.
 
 The model runs through Ollama (https://ollama.com). There is no account, no key
-and no outside AI service. If Ollama is not running, nothing is changed. If a
-model is not on this machine yet, the program asks before it downloads it.
+and no outside AI service. If Ollama is not running, nothing is changed.
+
+If the model of the settings is not on this machine, a model that Ollama already
+has is used (setting "other_chat_models"). A small helper model (about 46 MB) is
+downloaded without a question. Before a big download the program asks.
 
     python ai_brief.py           add the AI part to the newest digest
     python ai_brief.py --open    the same, then open the page in the browser
@@ -27,13 +30,14 @@ import urllib.error
 import urllib.request
 import webbrowser
 
-VERSION = "1.2"
+VERSION = "1.3"
 HERE = pathlib.Path(__file__).resolve().parent
 START, END = "<!-- ai-brief:start -->", "<!-- ai-brief:end -->"
 DEFAULTS = {
     "enabled": True,
     "ollama_url": "http://127.0.0.1:11434",
     "chat_model": "phi4-mini",
+    "other_chat_models": ["llama3.2"],   # used when chat_model is not on this machine
     "embed_model": "all-minilm",
     "download_missing_models": "ask",   # true, false or "ask"
     "top_picks": 5,
@@ -46,6 +50,7 @@ LINK_RE = re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)")
 SCHEMA = {"type": "object", "properties": {"sentence": {"type": "string"}},
           "required": ["sentence"]}
 SIZES = {"phi4-mini": "about 2.5 GB", "all-minilm": "about 46 MB"}
+SMALL = ("all-minilm",)   # small enough to download without a question
 NUMBER_RE = re.compile(r"\d[\d,.]*\d|\d")
 DAY_RE = re.compile(r",\s*\d{1,2} [A-Z][a-z]{2}\)")   # the day in "(20 posts, Adda247, 20 Nov)"
 
@@ -62,7 +67,7 @@ def say(text=""):
 # --------------------------------------------------------------------------
 
 class AiError(Exception):
-    pass
+    code = 0   # the HTTP code, when the AI program answered with an error
 
 
 class Ollama:
@@ -80,15 +85,15 @@ class Ollama:
                 return json.loads(response.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", "replace")[:200]
-            raise AiError("the AI program answered HTTP %s %s" % (exc.code, detail))
+            error = AiError("the AI program answered HTTP %s %s" % (exc.code, detail))
+            error.code = exc.code
+            raise error
         except (urllib.error.URLError, OSError, ValueError) as exc:
             raise AiError("no answer from the AI program (%s)" % (getattr(exc, "reason", exc),))
 
-    def missing(self, models):
-        """The models of the list that are not on this machine."""
-        names = [m.get("name", "") for m in self.call("/api/tags").get("models", [])]
-        return [model for model in models
-                if not any(name == model or name.split(":")[0] == model for name in names)]
+    def installed(self):
+        """The names of the models on this machine, such as "llama3.2:latest"."""
+        return [m.get("name", "") for m in self.call("/api/tags").get("models", [])]
 
     def pull(self, model):
         """Download a model and show how far it is."""
@@ -128,12 +133,34 @@ class Ollama:
         return vectors
 
     def chat(self, model, system, user):
-        answer = self.call("/api/chat", {
+        payload = {
             "model": model, "stream": False, "format": SCHEMA,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
             "options": {"temperature": 0.2, "num_ctx": 2048, "num_predict": 120},
-        }, timeout=900)
+        }
+        try:
+            answer = self.call("/api/chat", payload, timeout=900)
+        except AiError as exc:
+            if exc.code != 400:
+                raise
+            payload["format"] = "json"   # an older Ollama does not know a JSON schema here
+            answer = self.call("/api/chat", payload, timeout=900)
         return (answer.get("message") or {}).get("content", "")
+
+
+def find(names, model):
+    """The name under which a model is on this machine, or "" when it is not there."""
+    for name in names:
+        if name in (model, model + ":latest"):
+            return name
+    for name in names:
+        if name.split(":")[0] == model:
+            return name   # another size of the same model, such as llama3.2:1b
+    return ""
+
+
+def plain(name):
+    return name[:-len(":latest")] if name.endswith(":latest") else name
 
 
 def cosine(a, b):
@@ -183,9 +210,9 @@ def read_items(markdown):
 # The two AI jobs: pick by meaning, and explain a pick in one line
 # --------------------------------------------------------------------------
 
-def pick_by_meaning(ai, cfg, items):
+def pick_by_meaning(ai, model, cfg, items):
     texts = [cfg["reader"]] + ["%s. %s" % (item["title"], item["note"]) for item in items]
-    vectors = ai.embed(cfg["embed_model"], [text[:600] for text in texts])
+    vectors = ai.embed(model, [text[:600] for text in texts])
     reader, rest = vectors[0], vectors[1:]
     order = sorted(range(len(items)), key=lambda i: cosine(reader, rest[i]), reverse=True)
     picks, per_section = [], {}
@@ -215,7 +242,7 @@ def numbers_in(text):
     return {re.sub(r"[,.]", "", number) for number in NUMBER_RE.findall(text)}
 
 
-def explain(ai, cfg, item):
+def explain(ai, model, item):
     """One plain sentence about one item, or "" when the answer cannot be trusted."""
     facts = "Item: %s\n" % item["title"]
     if item.get("source"):
@@ -228,7 +255,7 @@ def explain(ai, cfg, item):
     user = (facts + "\nWrite one sentence of at most 25 words that says in plain words what this "
             'item is about.\nAnswer as JSON: {"sentence": "..."}')
     try:
-        answer = json.loads(ai.chat(cfg["chat_model"], system, user))
+        answer = json.loads(ai.chat(model, system, user))
     except ValueError:
         return ""
     text = clean_sentence(answer.get("sentence", "") if isinstance(answer, dict) else "")
@@ -237,47 +264,76 @@ def explain(ai, cfg, item):
     return text
 
 
-def may_download(cfg, missing):
-    """May the missing models be downloaded? With the setting "ask" a person has to say yes."""
+def allowed_downloads(cfg, missing):
+    """The missing models that may be downloaded now.
+
+    Setting true: all of them. Setting false: none. Setting "ask": a small helper model
+    is downloaded without a question, and for a big model a person has to say yes.
+    """
     setting = cfg["download_missing_models"]
+    if setting is True:
+        return list(missing)
     if setting != "ask":
-        return setting is True
-    if not (sys.stdin and sys.stdin.isatty()):
-        return False  # nobody is there to answer, for example in a scheduled run
-    say("The AI part needs a download, one time: %s."
-        % ", ".join("%s (%s)" % (model, SIZES.get(model, "size not known")) for model in missing))
-    try:
-        answer = input("Download now? Type y and press Enter. To skip, press only Enter: ")
-    except (EOFError, OSError):
-        return False
-    return answer.strip().lower() in ("y", "yes")
+        return []
+    big = [model for model in missing if model not in SMALL]
+    yes = False
+    if big and sys.stdin and sys.stdin.isatty():   # else nobody is there to answer
+        say("The AI part needs a download, one time: %s."
+            % ", ".join("%s (%s)" % (model, SIZES.get(model, "size not known")) for model in big))
+        try:
+            answer = input("Download now? Type y and press Enter. To skip, press only Enter: ")
+        except (EOFError, OSError):
+            answer = ""
+        yes = answer.strip().lower() in ("y", "yes")
+    return [model for model in missing if model in SMALL or yes]
 
 
 def get_models(ai, cfg, notes):
-    """The models that are ready to use. Missing ones are downloaded when that is allowed."""
-    wanted = [cfg["embed_model"], cfg["chat_model"]]
-    missing = ai.missing(wanted)
-    if missing and may_download(cfg, missing):
-        for model in missing:
-            say("Downloading the AI model %s, one time. Please wait..." % model)
-            try:
-                ai.pull(model)
-            except AiError as exc:
-                notes.append(str(exc))
-        missing = ai.missing(wanted)
-    notes += ["the AI model %s is not on this machine" % model for model in missing]
-    return [model for model in wanted if model not in missing]
+    """Find the two models. Returns their names on this machine; "" for one that is not there.
+
+    When the chat model is not there, another model that Ollama already has is used, so
+    that nothing big has to be downloaded.
+    """
+    others = cfg["other_chat_models"] if isinstance(cfg["other_chat_models"], list) else []
+
+    def look():
+        names = ai.installed()
+        chat = find(names, cfg["chat_model"])
+        for other in others:
+            chat = chat or find(names, str(other))
+        return find(names, cfg["embed_model"]), chat
+
+    embed, chat = look()
+    missing = [model for model, found in ((cfg["embed_model"], embed), (cfg["chat_model"], chat))
+               if not found]
+    for model in allowed_downloads(cfg, missing):
+        say("Downloading the AI model %s (%s), one time. Please wait..."
+            % (model, SIZES.get(model, "size not known")))
+        try:
+            ai.pull(model)
+        except AiError as exc:
+            notes.append(str(exc))
+    if missing:
+        embed, chat = look()
+    notes += ["the AI model %s is not on this machine" % model
+              for model, found in ((cfg["embed_model"], embed), (cfg["chat_model"], chat))
+              if not found]
+    if chat and not find([chat], cfg["chat_model"]):
+        say("AI part: %s is not on this machine, so the model %s is used."
+            % (cfg["chat_model"], plain(chat)))
+    return embed, chat
 
 
 # --------------------------------------------------------------------------
 # Writing the AI part into the files
 # --------------------------------------------------------------------------
 
-def footer(model, by_meaning):
-    how = ("picked these items by meaning and wrote the short lines" if by_meaning
-           else "wrote the short lines")
+def footer(model, by_meaning, picks):
+    did = [words for words, yes in (("picked these items by meaning", by_meaning),
+                                    ("wrote the short lines", any(i.get("ai") for i in picks)))
+           if yes]
     return ("A small AI model (%s) %s. It ran on this machine, with no outside AI service. "
-            "It can make mistakes, so check the links." % (model, how))
+            "It can make mistakes, so check the links." % (model, " and ".join(did)))
 
 
 def block_markdown(picks, model, by_meaning):
@@ -286,7 +342,7 @@ def block_markdown(picks, model, by_meaning):
         title = item["title"].replace("[", "(").replace("]", ")")
         line = "%d. [%s](%s)" % (n, title, item["url"])
         out.append(line + (": " + item["ai"] if item.get("ai") else ""))
-    out += ["", "*%s*" % footer(model, by_meaning), END, "", ""]
+    out += ["", "*%s*" % footer(model, by_meaning, picks), END, "", ""]
     return "\n".join(out)
 
 
@@ -302,7 +358,7 @@ def block_html(picks, model, by_meaning):
                    % (esc(item["url"]), esc(item["title"]),
                       ": " + esc(item["ai"]) if item.get("ai") else ""))
     out.append('</ol><p style="margin:8px 0 0 0;color:#59636e;font-size:12px;">%s</p></div>'
-               % esc(footer(model, by_meaning)))
+               % esc(footer(model, by_meaning, picks)))
     out.append(END)
     return "\n".join(out) + "\n"
 
@@ -330,7 +386,7 @@ def newest(folder, pattern):
 # Main program
 # --------------------------------------------------------------------------
 
-def run(cfg, out_dir):
+def run(cfg, out_dir, report):
     source = out_dir / "latest.md"
     if not source.exists():
         source = newest(out_dir, "*-20*.md")
@@ -341,45 +397,47 @@ def run(cfg, out_dir):
         raise AiError("the digest has fewer than 2 items, so there is nothing to sort")
 
     ai = Ollama(cfg["ollama_url"])
-    ai.call("/api/version", timeout=10)
+    version = ai.call("/api/version", timeout=10)
+    report["ollama"] = str(version.get("version", "") if isinstance(version, dict) else "")[:40]
     notes = []
-    ready = get_models(ai, cfg, notes)
-    if not ready:
+    embed, chat = get_models(ai, cfg, notes)
+    if not embed and not chat:
         raise AiError("; ".join(notes))
     say("AI part: the AI model is reading the digest...")
     picks, by_meaning, sentences = [], False, 0
-    if cfg["embed_model"] in ready:
+    if embed:
         try:
-            picks, by_meaning = pick_by_meaning(ai, cfg, items), True
+            picks, by_meaning = pick_by_meaning(ai, embed, cfg, items), True
         except AiError as exc:
             notes.append("picks: %s" % exc)
     if not by_meaning:
         picks = items[:int(cfg["top_picks"])]
-    if cfg["chat_model"] in ready:
+    if chat:
         try:
             for item in picks[:int(cfg["explain_top"])]:
-                item["ai"] = explain(ai, cfg, item)
+                item["ai"] = explain(ai, chat, item)
                 sentences += 1 if item["ai"] else 0
         except AiError as exc:
             notes.append("sentences: %s" % exc)
     if not picks or (not by_meaning and not sentences):
         raise AiError("; ".join(notes) or "the AI model gave nothing usable")
+    model = plain(chat or embed)
 
     changed = []
     for path in {source, out_dir / "latest.md", newest(out_dir, "*-20*.md")}:
         if path and path.exists():
             text = insert_block(path.read_text(encoding="utf-8"),
-                                block_markdown(picks, cfg["chat_model"], by_meaning), ["## "])
+                                block_markdown(picks, model, by_meaning), ["## "])
             write_text(path, text)
             changed.append(path.name)
     for path in {out_dir / "latest.html", newest(out_dir, "*-20*.html")}:
         if path and path.exists():
             text = insert_block(path.read_text(encoding="utf-8"),
-                                block_html(picks, cfg["chat_model"], by_meaning),
+                                block_html(picks, model, by_meaning),
                                 ['<div style="background:#f0f6ff', "<h2 "])
             write_text(path, text)
             changed.append(path.name)
-    return {"items": len(items), "picks": len(picks), "sentences": sentences,
+    return {"model": model, "items": len(items), "picks": len(picks), "sentences": sentences,
             "by_meaning": by_meaning, "files": sorted(changed), "notes": notes}
 
 
@@ -404,7 +462,7 @@ def main(argv=None):
         report["reason"] = "switched off in ai_settings.json"
     else:
         try:
-            report.update(run(cfg, out_dir), ok=True)
+            report.update(run(cfg, out_dir, report), ok=True)
         except AiError as exc:
             report["reason"] = str(exc)
         except Exception as exc:  # the AI part must never break the digest

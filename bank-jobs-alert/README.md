@@ -36,7 +36,10 @@ that fit a job seeker best, each with one short line.
 - It needs the free program Ollama (https://ollama.com), installed and running.
   Without it this step is skipped and the alert is unchanged.
 - No account and no key are needed. Nothing is sent to an AI service.
-- The first time, it asks before it downloads the model (about 2.5 GB, one time).
+- It uses the model phi4-mini. If Ollama does not have it but has llama3.2, it uses
+  llama3.2. Then there is no big download.
+- One small helper model (about 46 MB) is downloaded by itself, one time. Before a big
+  download (about 2.5 GB) the program asks first.
 - The model is small and can make mistakes. Check the links.
 - To switch it off, open ai_settings.json in Notepad and set "enabled" to false.
 
@@ -45,7 +48,7 @@ that fit a job seeker best, each with one short line.
 The same program runs on GitHub every day a little after 8:00 AM India time
 (file .github/workflows/bank-jobs.yml). It adds the AI picks, saves the alert in this
 folder under "out" and opens an issue, so GitHub emails the alert to the owner of the
-repository.
+repository. If GitHub does not start it, a backup start tries again one hour later.
 
 ## Important
 
