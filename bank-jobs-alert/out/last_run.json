@@ -1,8 +1,8 @@
 {
   "version": "1.0",
-  "finished": "2026-11-21T03:35:38+00:00",
+  "finished": "2026-11-21T03:42:03+00:00",
   "python": "3.14.4",
-  "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
+  "system": "Linux-7.0.0-1016-aws-x86_64-with-glibc2.43",
   "window_hours": 36.0,
   "total_items": 1,
   "groups": {
@@ -15,7 +15,7 @@
       "source": "News search 1",
       "query": "bank recruitment 2026 notification apply online when:2d",
       "ok": true,
-      "fetched": 71,
+      "fetched": 89,
       "kept": 1
     },
     {
@@ -36,7 +36,7 @@
       "source": "News search 4",
       "query": "(\"Bank of Baroda\" OR \"Punjab National Bank\" OR \"Canara Bank\" OR \"Union Bank of India\" OR \"Indian Bank\" OR \"Bank of India\") recruitment when:2d",
       "ok": true,
-      "fetched": 41,
+      "fetched": 24,
       "kept": 0
     },
     {
@@ -50,7 +50,7 @@
       "source": "News search 6",
       "query": "(\"HDFC Bank\" OR \"ICICI Bank\" OR \"Axis Bank\" OR \"Kotak Mahindra Bank\" OR \"IndusInd Bank\" OR \"IDFC FIRST Bank\" OR \"Yes Bank\") (recruitment OR hiring OR hire) when:2d",
       "ok": true,
-      "fetched": 9,
+      "fetched": 13,
       "kept": 0
     },
     {
