@@ -4,7 +4,7 @@
 
 ## Government banks
 
-- **SIDBI**: [SIDBI Grade A and B Recruitment 2026 Notification Out For 68 Posts](https://news.google.com/rss/articles/CBMic0FVX3lxTE83MHdaT1hfS05QdWdQMTVtSjZhMnFKc25rV3VmaEEzalFRSVN6cUxWT2J1TnZYQm5hR0JFSkh1YV92TnJhNlA1aUwwX0VvOUctQnh6XzNJczFIbS0zb1hMTDU2NEdOd1AzWmZfaWEzOWtob0E?oc=5) (68 posts, Bankersadda, 20 Nov)
+- **SIDBI**: [SIDBI Grade A and B Notification 2026 Out 68 Posts, Apply Online Starts](https://news.google.com/rss/articles/CBMid0FVX3lxTFB4NnIzd1MyaWtIVVh3SlRlLWE0Q0pzVFU1akdfeFBJU3dRam0xcDA4a0Q3cEdwaDl1em15dnNHeWQtZnlwMXhsVEtHSVEzR3RxbmtzTExaLXQxcmtXRXE2cGYzanZmbWdPZktmN0ZXbnp2SGkySmU4?oc=5) (68 posts, Adda247, 21 Nov)
 
 ## Private banks
 

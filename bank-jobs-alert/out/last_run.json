@@ -1,8 +1,8 @@
 {
   "version": "1.0",
-  "finished": "2026-11-21T03:42:03+00:00",
+  "finished": "2026-11-21T05:26:16+00:00",
   "python": "3.14.4",
-  "system": "Linux-7.0.0-1016-aws-x86_64-with-glibc2.43",
+  "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
   "total_items": 1,
   "groups": {
@@ -15,7 +15,7 @@
       "source": "News search 1",
       "query": "bank recruitment 2026 notification apply online when:2d",
       "ok": true,
-      "fetched": 89,
+      "fetched": 91,
       "kept": 1
     },
     {
@@ -29,14 +29,14 @@
       "source": "News search 3",
       "query": "(SBI OR IBPS OR RBI OR NABARD OR SIDBI) recruitment notification when:2d",
       "ok": true,
-      "fetched": 31,
+      "fetched": 29,
       "kept": 0
     },
     {
       "source": "News search 4",
       "query": "(\"Bank of Baroda\" OR \"Punjab National Bank\" OR \"Canara Bank\" OR \"Union Bank of India\" OR \"Indian Bank\" OR \"Bank of India\") recruitment when:2d",
       "ok": true,
-      "fetched": 24,
+      "fetched": 26,
       "kept": 0
     },
     {
