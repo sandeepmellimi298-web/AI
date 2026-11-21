@@ -1,0 +1,71 @@
+name: Clock
+
+# The clock starts the three daily jobs at the right time:
+#   AI Updates Digest   7:53 AM in India
+#   Bank Jobs Alert     8:07 AM in India
+#   Gold Rate Alert     8:57 AM and 3:57 PM in India
+#
+# Why it is here: GitHub's own timer ("schedule") did not start the jobs in this
+# repository. A clock run first waits in an "environment" with a wait timer. Then it starts
+# the jobs that are due, and then it starts the next clock run. See cloud/clock.py.
+#
+# Two clock runs are always waiting: one of the line "main" and one of the line "guard".
+# That is normal. Please do not cancel them.
+#
+# If the emails stop: press "Run workflow" here, one time, and change nothing in the form.
+# About 12 minutes later the clock runs again.
+
+run-name: Clock ${{ inputs.line || 'main' }} ${{ inputs.wait || 'wait-12' }}
+
+on:
+  workflow_dispatch:   # the clock starts itself with this; it also adds the "Run workflow" button
+    inputs:
+      line:
+        description: "Leave this as it is"
+        type: choice
+        default: main
+        options:
+          - main
+          - guard
+      wait:
+        description: "Leave this as it is"
+        type: choice
+        default: wait-12
+        options:
+          - wait-12
+          - wait-48
+          - wait-418
+          - wait-954
+  schedule:
+    # A safety net. If GitHub's own timer works again one day, it starts the clock again
+    # when the clock has stopped. While the clock is running, such a start does nothing.
+    - cron: "43 1,5,9,17 * * *"
+
+permissions:
+  actions: write   # to start the daily jobs and the next clock run
+  contents: read
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    # GitHub holds this job back for the minutes of the environment (its "wait timer").
+    # No machine is used during the wait. "deployment: false" keeps the list of
+    # deployments of this repository empty.
+    environment:
+      name: ${{ inputs.wait || 'wait-12' }}
+      deployment: false
+    steps:
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_REF_NAME}"
+          git checkout -q -B "${GITHUB_REF_NAME}" FETCH_HEAD
+
+      - name: Start the jobs that are due, then the next clock run
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CLOCK_LINE: ${{ inputs.line || 'main' }}
+          CLOCK_WAIT: ${{ inputs.wait || 'wait-12' }}
+        run: python3 cloud/clock.py

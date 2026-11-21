@@ -1,0 +1,30 @@
+name: Clock test (manual)
+
+# A test of the clock, to run by hand with the "Run workflow" button.
+# It checks that the clock can read what it needs from GitHub. Then it starts the Gold Rate
+# Alert in the same way as the clock does. The Gold Rate Alert does nothing when its last
+# run finished less than 3 hours ago. In all other cases it sends its email as usual.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write   # to start the Gold Rate Alert, as the clock does
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_REF_NAME}"
+          git checkout -q -B "${GITHUB_REF_NAME}" FETCH_HEAD
+
+      - name: Read from GitHub and start one job, as the clock does
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 cloud/clock.py --test
