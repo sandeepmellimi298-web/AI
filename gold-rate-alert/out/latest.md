@@ -1,4 +1,4 @@
-# Gold 22K: ₹11,349 for 1 gram, no new rate (Sat 21 Nov, 7:06 PM)
+# Gold 22K: ₹11,349 for 1 gram, no new rate (Sat 21 Nov, 11:01 PM)
 
 **22K gold, 1 gram: ₹11,349**, ▼ ₹516 (-4.35%) from the closing rate of Thursday 19 Nov
 
