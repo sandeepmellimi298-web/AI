@@ -3,10 +3,12 @@
 
 A small AI model that runs on this machine reads the newest digest in the folder
 "out", picks the items that matter most by meaning, and writes one short line
-about the first of them at the top. It works for the AI Updates Digest and for the Bank Jobs Alert.
+about each of them at the top. It works for the AI Updates Digest and for the
+Bank Jobs Alert.
 
 The model runs through Ollama (https://ollama.com). There is no account, no key
-and no outside AI service. If Ollama or the model is missing, nothing is changed.
+and no outside AI service. If Ollama is not running, nothing is changed. If a
+model is not on this machine yet, the program asks before it downloads it.
 
     python ai_brief.py           add the AI part to the newest digest
     python ai_brief.py --open    the same, then open the page in the browser
@@ -25,7 +27,7 @@ import urllib.error
 import urllib.request
 import webbrowser
 
-VERSION = "1.1"
+VERSION = "1.2"
 HERE = pathlib.Path(__file__).resolve().parent
 START, END = "<!-- ai-brief:start -->", "<!-- ai-brief:end -->"
 DEFAULTS = {
@@ -33,7 +35,7 @@ DEFAULTS = {
     "ollama_url": "http://127.0.0.1:11434",
     "chat_model": "phi4-mini",
     "embed_model": "all-minilm",
-    "download_missing_models": True,
+    "download_missing_models": "ask",   # true, false or "ask"
     "top_picks": 5,
     "max_picks_per_section": 2,
     "explain_top": 3,
@@ -43,6 +45,9 @@ SKIP_SECTIONS = ("in 30 seconds", "ai picks")
 LINK_RE = re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)")
 SCHEMA = {"type": "object", "properties": {"sentence": {"type": "string"}},
           "required": ["sentence"]}
+SIZES = {"phi4-mini": "about 2.5 GB", "all-minilm": "about 46 MB"}
+NUMBER_RE = re.compile(r"\d[\d,.]*\d|\d")
+DAY_RE = re.compile(r",\s*\d{1,2} [A-Z][a-z]{2}\)")   # the day in "(20 posts, Adda247, 20 Nov)"
 
 
 def say(text=""):
@@ -79,18 +84,41 @@ class Ollama:
         except (urllib.error.URLError, OSError, ValueError) as exc:
             raise AiError("no answer from the AI program (%s)" % (getattr(exc, "reason", exc),))
 
-    def has(self, model):
+    def missing(self, models):
+        """The models of the list that are not on this machine."""
         names = [m.get("name", "") for m in self.call("/api/tags").get("models", [])]
-        return any(name == model or name.split(":")[0] == model for name in names)
+        return [model for model in models
+                if not any(name == model or name.split(":")[0] == model for name in names)]
 
-    def need(self, model, download):
-        if self.has(model):
-            return
-        if not download:
-            raise AiError("the AI model %s is not on this machine" % model)
-        say("The AI model %s is not on this machine yet. Downloading it now, one time. "
-            "This can take some minutes..." % model)
-        self.call("/api/pull", {"model": model, "stream": False}, timeout=3600)
+    def pull(self, model):
+        """Download a model and show how far it is."""
+        data = json.dumps({"model": model, "stream": True}).encode("utf-8")
+        request = urllib.request.Request(self.base + "/api/pull", data=data,
+                                         headers={"Content-Type": "application/json"})
+        shown = {}
+        try:
+            with self.opener.open(request, timeout=600) as response:
+                for raw in response:
+                    try:
+                        step = json.loads(raw.decode("utf-8"))
+                    except ValueError:
+                        continue
+                    if not isinstance(step, dict):
+                        continue
+                    if step.get("error"):
+                        raise AiError("the download of %s failed (%s)"
+                                      % (model, str(step["error"])[:200]))
+                    total, done = step.get("total"), step.get("completed") or 0
+                    if not isinstance(total, (int, float)) or not isinstance(done, (int, float)):
+                        continue
+                    part = int(10 * done / total) if total > 50000000 else -1
+                    if part > shown.get(step.get("digest"), -1):
+                        shown[step.get("digest")] = part
+                        say("  %s: %d%% of %.1f GB" % (model, part * 10, total / 1e9))
+        except urllib.error.HTTPError as exc:
+            raise AiError("the download of %s failed (HTTP %s)" % (model, exc.code))
+        except (urllib.error.URLError, OSError) as exc:
+            raise AiError("the download of %s stopped (%s)" % (model, getattr(exc, "reason", exc)))
 
     def embed(self, model, texts):
         answer = self.call("/api/embed", {"model": model, "input": texts}, timeout=300)
@@ -125,7 +153,7 @@ def strip_block(text):
 
 
 def read_items(markdown):
-    """Find the items of a digest: section, title, link and a short note."""
+    """Find the items of a digest: section, title, link, where it is from and what it says."""
     items, section, links = [], "", set()
     lines = markdown.splitlines()
     for index, line in enumerate(lines):
@@ -140,9 +168,14 @@ def read_items(markdown):
         links.add(match.group(2))
         around = [line[2:match.start()], line[match.end():]]
         around += [extra for extra in lines[index + 1:index + 3] if extra.startswith("  ")]
-        note = " ".join(re.sub(r"[*\[\]]", "", part).strip(" :") for part in around)
-        items.append({"section": section, "title": match.group(1).strip(),
-                      "url": match.group(2), "note": re.sub(r"\s+", " ", note).strip()[:300]})
+        parts = [re.sub(r"\s+", " ", re.sub(r"[*\[\]]", "", part)).strip(" :") for part in around]
+        parts = [part for part in parts if part]
+        # A part such as "GitHub | 425 stars | ABAP | MIT" tells where the item is from; the
+        # model only gets its first piece, so that it cannot mix up stars, language and licence.
+        items.append({"section": section, "title": match.group(1).strip(), "url": match.group(2),
+                      "note": " ".join(parts)[:300],
+                      "source": " ".join(p.split(" | ")[0] for p in parts if " | " in p)[:80],
+                      "text": " ".join(p for p in parts if " | " not in p)[:300]})
     return items
 
 
@@ -173,28 +206,67 @@ def clean_sentence(text):
     text = re.sub(r"https?://\S+", "", str(text))
     text = re.sub(r"[(\[]\s*\d+(?:\s*,\s*\d+)*\s*[)\]]", " ", text)  # item numbers such as (1)
     text = re.sub(r"<[^>]*>", " ", text)
-    text = re.sub(r"[\[\]()<>*_#|\"]", " ", text)
+    text = re.sub(r"[\[\]()<>*_#|~\"\x60]", " ", text)
     text = re.sub(r"\s+", " ", text).strip(" -")
     return text[:240]
 
 
+def numbers_in(text):
+    return {re.sub(r"[,.]", "", number) for number in NUMBER_RE.findall(text)}
+
+
 def explain(ai, cfg, item):
     """One plain sentence about one item, or "" when the answer cannot be trusted."""
+    facts = "Item: %s\n" % item["title"]
+    if item.get("source"):
+        facts += "Source: %s\n" % item["source"]
+    if item.get("text"):
+        # Without the day, so that a day such as "20 Nov" cannot pass as a number of posts.
+        facts += "Details: %s\n" % DAY_RE.sub(")", item["text"])
     system = ("You explain one news item in one short sentence in simple English. Use only what "
               "the item says. Never add a fact, a number, a date, a link or advice.")
-    user = ("Item: %s\nDetails: %s\n\nWrite one sentence of at most 25 words that says in plain "
-            "words what this item is about.\n"
-            'Answer as JSON: {"sentence": "..."}' % (item["title"], item["note"] or "none"))
+    user = (facts + "\nWrite one sentence of at most 25 words that says in plain words what this "
+            'item is about.\nAnswer as JSON: {"sentence": "..."}')
     try:
         answer = json.loads(ai.chat(cfg["chat_model"], system, user))
     except ValueError:
         return ""
     text = clean_sentence(answer.get("sentence", "") if isinstance(answer, dict) else "")
-    known = re.sub(r"[,.]", "", "%s %s" % (item["title"], item["note"]))
-    numbers = re.findall(r"\d[\d,.]*\d|\d", text)
-    if len(text) < 15 or any(re.sub(r"[,.]", "", number) not in known for number in numbers):
+    if len(text) < 15 or not numbers_in(text) <= numbers_in(facts):
         return ""  # too short, or a number that is not in the item: do not trust it
     return text
+
+
+def may_download(cfg, missing):
+    """May the missing models be downloaded? With the setting "ask" a person has to say yes."""
+    setting = cfg["download_missing_models"]
+    if setting != "ask":
+        return setting is True
+    if not (sys.stdin and sys.stdin.isatty()):
+        return False  # nobody is there to answer, for example in a scheduled run
+    say("The AI part needs a download, one time: %s."
+        % ", ".join("%s (%s)" % (model, SIZES.get(model, "size not known")) for model in missing))
+    try:
+        answer = input("Download now? Type y and press Enter. To skip, press only Enter: ")
+    except (EOFError, OSError):
+        return False
+    return answer.strip().lower() in ("y", "yes")
+
+
+def get_models(ai, cfg, notes):
+    """The models that are ready to use. Missing ones are downloaded when that is allowed."""
+    wanted = [cfg["embed_model"], cfg["chat_model"]]
+    missing = ai.missing(wanted)
+    if missing and may_download(cfg, missing):
+        for model in missing:
+            say("Downloading the AI model %s, one time. Please wait..." % model)
+            try:
+                ai.pull(model)
+            except AiError as exc:
+                notes.append(str(exc))
+        missing = ai.missing(wanted)
+    notes += ["the AI model %s is not on this machine" % model for model in missing]
+    return [model for model in wanted if model not in missing]
 
 
 # --------------------------------------------------------------------------
@@ -270,21 +342,27 @@ def run(cfg, out_dir):
 
     ai = Ollama(cfg["ollama_url"])
     ai.call("/api/version", timeout=10)
-    picks, notes, by_meaning, sentences = [], [], True, 0
-    try:
-        ai.need(cfg["embed_model"], cfg["download_missing_models"])
-        picks = pick_by_meaning(ai, cfg, items)
-    except AiError as exc:
-        notes.append("picks: %s" % exc)
-        picks, by_meaning = items[:int(cfg["top_picks"])], False
-    try:
-        ai.need(cfg["chat_model"], cfg["download_missing_models"])
-        for item in picks[:int(cfg["explain_top"])]:
-            item["ai"] = explain(ai, cfg, item)
-            sentences += 1 if item["ai"] else 0
-    except AiError as exc:
-        notes.append("sentences: %s" % exc)
-    if not by_meaning and not sentences:
+    notes = []
+    ready = get_models(ai, cfg, notes)
+    if not ready:
+        raise AiError("; ".join(notes))
+    say("AI part: the AI model is reading the digest...")
+    picks, by_meaning, sentences = [], False, 0
+    if cfg["embed_model"] in ready:
+        try:
+            picks, by_meaning = pick_by_meaning(ai, cfg, items), True
+        except AiError as exc:
+            notes.append("picks: %s" % exc)
+    if not by_meaning:
+        picks = items[:int(cfg["top_picks"])]
+    if cfg["chat_model"] in ready:
+        try:
+            for item in picks[:int(cfg["explain_top"])]:
+                item["ai"] = explain(ai, cfg, item)
+                sentences += 1 if item["ai"] else 0
+        except AiError as exc:
+            notes.append("sentences: %s" % exc)
+    if not picks or (not by_meaning and not sentences):
         raise AiError("; ".join(notes) or "the AI model gave nothing usable")
 
     changed = []
@@ -326,7 +404,6 @@ def main(argv=None):
         report["reason"] = "switched off in ai_settings.json"
     else:
         try:
-            say("AI part: the model %s is reading the digest..." % cfg["chat_model"])
             report.update(run(cfg, out_dir), ok=True)
         except AiError as exc:
             report["reason"] = str(exc)

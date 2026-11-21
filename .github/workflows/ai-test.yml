@@ -30,3 +30,15 @@ jobs:
             python3 "$app/ai_brief.py" --out "$RUNNER_TEMP/$app-out"
             python3 -c 'import json,pathlib,sys; out=pathlib.Path(sys.argv[2]); t=(out/"latest.md").read_text(encoding="utf-8"); a=t.find("<!-- ai-brief:start -->"); b=t.find("<!-- ai-brief:end -->"); r=json.loads((out/"last_run.json").read_text(encoding="utf-8")).get("ai"); m=json.dumps(r)+"\n"+(t[a:b] if a>=0 else "NO AI BLOCK"); print(m); print("::notice title=AI test "+sys.argv[1]+"::"+m.replace("%","%25").replace("\n","%0A"))' "$app" "$RUNNER_TEMP/$app-out"
           done
+
+      # On a computer the program downloads a missing model by itself (after a question).
+      # Here the models are removed first, so that this download is tried for real.
+      - name: Try the download that the program does on a computer
+        run: |
+          BIN="$(find "$RUNNER_TEMP/ollama" -maxdepth 3 -type f -name ollama | head -n 1)"
+          "$BIN" rm phi4-mini all-minilm
+          cp -r bank-jobs-alert/out "$RUNNER_TEMP/pull-out"
+          python3 -c 'import json,sys; s=json.load(open("bank-jobs-alert/ai_settings.json", encoding="utf-8")); s["download_missing_models"]=True; json.dump(s, open(sys.argv[1], "w", encoding="utf-8"))' "$RUNNER_TEMP/pull-settings.json"
+          python3 bank-jobs-alert/ai_brief.py --out "$RUNNER_TEMP/pull-out" --settings "$RUNNER_TEMP/pull-settings.json" > "$RUNNER_TEMP/pull-log.txt" 2>&1 || true
+          cat "$RUNNER_TEMP/pull-log.txt"
+          python3 -c 'import sys; m=open(sys.argv[1], encoding="utf-8", errors="replace").read()[-1800:]; print("::notice title=AI test download::"+m.replace("%","%25").replace("\n","%0A"))' "$RUNNER_TEMP/pull-log.txt"
