@@ -50,8 +50,9 @@ jobs:
                                                     for s in report["sources"]))
           notice("Gold test 2 alert", markdown)
           title, body = post_issue.build_issue(report, markdown, "owner")
-          notice("Gold test 3 email", "title: %s\nfirst line: %s\nlast line: %s\nestimate: %s"
-                 % (title, body.splitlines()[0], body.splitlines()[-1], json.dumps(report.get("estimate"))))
+          notice("Gold test 3 email", "title: %s\nfirst line: %s\nlast line: %s\nestimate: %s\nforecast: %s"
+                 % (title, body.splitlines()[0], body.splitlines()[-1], json.dumps(report.get("estimate")),
+                    json.dumps(report.get("forecast"))))
           notice("Gold test 4 saved", "official rates: %s\nworld price at these rates: %s" % (
               ", ".join("%s %s 916=%s 999=%s" % (day, part, values.get("916"), values.get("999"))
                         for day in sorted(history["fixes"]) for part, values in sorted(history["fixes"][day].items())),

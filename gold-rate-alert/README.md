@@ -1,13 +1,15 @@
 # Gold Rate Alert
 
 This tool shows the price of 22K gold for 1 gram in Indian rupees (&#8377;), how the price
-changed, and a simple estimate of the next official rate.
+changed, a simple estimate of the next official rate, and a tested price range for the
+next 7 days.
 
 ## What the alert shows
 
 - The official rate of 22K gold for 1 gram, 8 grams and 10 grams. 24K is shown next to it.
 - The change from the day before, in rupees and in percent.
 - An estimate of the next official rate, with a range.
+- A forecast for 7 days: a price range, a chance, and how the market moves now.
 - All prices are in rupees and written the Indian way, for example &#8377;1,13,486.
 
 ## Where the numbers come from
@@ -30,6 +32,25 @@ rate, so the estimate is the last official rate minus 1.4%.
 - It is not advice to buy or sell gold.
 - The program checks every estimate against the real rate that comes later. The next
   alert shows the result in the line "Check".
+
+## The forecast for 7 days
+
+The forecast says how far the price can move in about 7 days. It does not say "up" or "down".
+
+- **The model** is in gold_ai.py. It reads about 5 years of daily world gold prices and
+  measures how big the daily moves are now. New days count more than old days.
+- **The range.** "8 times out of 10 between A and B" means: in the test, 8 of 10 real
+  prices came inside ranges that were made the same way.
+- **The test.** For each past day the model made a range with only what was known on that
+  day. Then it looked whether the real price came inside. The alert shows the result.
+- **In real use.** The alert saves every range. When that day comes, it compares the range
+  with the real closing rate and shows the count.
+- **Up or down.** The file gold_lab.py tests models that try to say "up" or "down": simple
+  rules, logistic regression, boosted trees, a random forest and neural networks. In the
+  tests so far no model was better than chance. So the alert shows a range, not an arrow.
+- **Run the test again.** On GitHub: Actions, "Gold model lab (manual)", Run workflow. It
+  takes about 10 minutes and shows the scores. It needs numpy and scikit-learn; the alert
+  itself does not.
 
 ## Run it on a Windows computer
 
@@ -59,6 +80,7 @@ Open config.json in Notepad.
 | grams | The weights in the table, for example [1, 8, 10]. |
 | gst_percent | The GST for the line "With GST". |
 | email_when_nothing_changed | true: an email at every run. false: no email when nothing changed, for example on Sunday. |
+| forecast | true: show the forecast for 7 days. false: leave it out. |
 
 ## Important
 

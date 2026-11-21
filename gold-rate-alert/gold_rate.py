@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Gold Rate Alert.
 
-Shows the price of 22K gold for 1 gram in Indian rupees, how it changed, and a
-simple estimate of the next official rate.
+Shows the price of 22K gold for 1 gram in Indian rupees, how it changed, a simple
+estimate of the next official rate, and a tested price range for the next 7 days.
 
     python gold_rate.py           make the alert in the folder "out"
     python gold_rate.py --open    the same, then open the page in the browser
@@ -15,7 +15,8 @@ Where the numbers come from:
   - The world gold price in US dollars comes from https://xaus.com/ (free, no key).
 
 The estimate: the last official rate, moved by the change of the world gold price
-since that rate was made. It is a simple calculation, not advice to buy or sell.
+since that rate was made. The 7-day range comes from the model in gold_ai.py.
+Both are calculations, not advice to buy or sell.
 
 Only the Python standard library is used. Settings are in config.json.
 """
@@ -23,6 +24,7 @@ import argparse
 import datetime
 import html
 import json
+import math
 import pathlib
 import re
 import sys
@@ -30,7 +32,12 @@ import urllib.error
 import urllib.request
 import webbrowser
 
-VERSION = "1.0"
+try:
+    import gold_ai
+except ImportError:   # the alert also works without the forecast model
+    gold_ai = None
+
+VERSION = "1.1"
 HERE = pathlib.Path(__file__).resolve().parent
 IST = datetime.timezone(datetime.timedelta(hours=5, minutes=30), "IST")
 RUPEE, UP, DOWN = chr(0x20B9), chr(0x25B2), chr(0x25BC)   # the rupee sign and the two arrows
@@ -39,6 +46,7 @@ DEFAULTS = {
     "spot_url": "https://xaus.com/api/v1/spot?currency=INR&unit=gram",
     "intraday_url": "https://xaus.com/api/v1/intraday?symbol=xau&hours=48",
     "backup_spot_url": "https://api.gold-api.com/price/XAU",
+    "history_url": "https://xaus.com/api/v1/history",
     "main_purity": "916",
     "main_name": "22K",
     "grams": [1, 8, 10],
@@ -46,6 +54,8 @@ DEFAULTS = {
     "opening_window": ["11:30", "12:00"],   # India time: when IBJA collects the opening rate
     "closing_window": ["16:30", "17:00"],   # India time: when IBJA collects the closing rate
     "first_range_percent": 1.0,             # range of the estimate until there is a record
+    "forecast": True,                       # show the tested price range of the model
+    "forecast_days": 7,
     "email_when_nothing_changed": True,
     "timeout_seconds": 40,
     "user_agent": "gold-rate-alert/1.0 (personal daily alert)",
@@ -54,8 +64,7 @@ NAMES = {"999": "24K (999)", "995": "995", "916": "22K (916)", "750": "18K (750)
 ROW_RE = re.compile(r'data-label="(AM|PM)">\s*(?:<strong>)?\s*(\d{1,2})/(\d{1,2})/(\d{4})\s*(?:</strong>)?\s*</td>'
                     r'(.*?)</tr>', re.S)
 CELL_RE = re.compile(r'data-label="Gold (\d{3})">\s*([0-9][0-9,]*)')
-CAUTION = ("The estimate is a simple calculation from the world gold price. Nobody can know the price "
-           "in advance. It is not advice to buy or sell.")
+CAUTION = "Nobody can know the price in advance."
 SHOPS = "Making charges are extra. Shop prices in your city can differ a little."
 
 
@@ -112,7 +121,7 @@ def parse_intraday(text):
     return sorted(points)
 
 
-def read_sources(cfg):
+def read_sources(cfg, now):
     """Read the sources. A source that fails is left out and named in the report."""
     sources, report = {}, []
 
@@ -128,6 +137,10 @@ def read_sources(cfg):
     read("world price, last 2 days", "intraday", cfg["intraday_url"], parse_intraday)
     if not sources.get("spot"):
         read("world price, second source", "spot", cfg["backup_spot_url"], parse_spot)
+    if cfg["forecast"] and gold_ai:
+        today = now.astimezone(datetime.timezone.utc).date().isoformat()
+        read("world price, 5 years", "history", cfg["history_url"],
+             lambda text: gold_ai.parse_history(text, before=today))
     return sources, report
 
 
@@ -271,6 +284,30 @@ def change_words(new, old, short=False):
 # --------------------------------------------------------------------------
 # The work of one run
 # --------------------------------------------------------------------------
+def week_forecast(cfg, now, points, official, estimate):
+    """The price range of the model for about 7 days ahead, in rupees for 10 grams."""
+    age = (now.date() - datetime.date.fromisoformat(points[-1][0])).days
+    if age > 6:
+        raise ValueError("the price history ends on %s" % points[-1][0])
+    model = gold_ai.forecast(points)
+    target = now.date() + datetime.timedelta(days=int(cfg["forecast_days"]))
+    while target.weekday() >= 5:   # a Saturday or Sunday: take the Friday before
+        target -= datetime.timedelta(days=1)
+    closing = datetime.datetime(target.year, target.month, target.day, 17, 0, tzinfo=IST)
+    days = gold_ai.market_open_days(now, closing)
+    middle = float(estimate["value"]) if estimate else float(official)
+    low, high = gold_ai.band(model, days)
+    return {"made": now.isoformat(timespec="seconds"), "target": target.isoformat(), "trading_days": round(days, 2),
+            "middle": round(middle), "low": round(middle * low), "high": round(middle * high),
+            "official": official,
+            "chance_lower": round(gold_ai.chance_below(model, days, math.log(official / middle)), 3),
+            "level": model["level"], "move_now": round(model["move_now"] * 100, 2),
+            "move_normal": round(model["move_normal"] * 100, 2),
+            "change_week": round(model["change_week"] * 100, 1),
+            "change_month": round(model["change_month"] * 100, 1),
+            "tested": model["tested"], "inside": model["inside"], "prices_until": model["last_day"]}
+
+
 def load_history(path):
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -278,7 +315,7 @@ def load_history(path):
         data = {}
     if not isinstance(data, dict):
         data = {}
-    for key in ("fixes", "spot_at_fix", "estimates"):
+    for key in ("fixes", "spot_at_fix", "estimates", "week"):
         if not isinstance(data.get(key), dict):
             data[key] = {}
     return data
@@ -362,12 +399,40 @@ def build(cfg, history, now, sources):
         notes.append("The world gold price at the time of the last official rate is not known, "
                      "so there is no estimate this time.")
 
-    # 5. keep the history small
-    for key, keep in (("fixes", 400), ("spot_at_fix", 60), ("estimates", 200)):
+    # 5. the range of the model for about 7 days ahead, and the check of its earlier ranges
+    outlook = None
+    if sources.get("history"):
+        try:
+            outlook = week_forecast(cfg, now, sources["history"], values[main], estimate)
+        except (ValueError, ArithmeticError, LookupError) as exc:
+            notes.append("The forecast model could not run this time (%s)." % exc)
+    elif cfg["forecast"] and gold_ai:
+        notes.append("The price history could not be read, so there is no 7-day forecast this time.")
+    for when, saved in history.setdefault("week", {}).items():
+        if not isinstance(saved, dict) or "inside" in saved or not number(saved.get("low")) \
+                or not number(saved.get("high")):
+            continue
+        rates = history["fixes"].get(when)
+        closing = rates.get("PM") if isinstance(rates, dict) else None
+        actual = closing.get(main) if isinstance(closing, dict) else None
+        if number(actual):
+            saved["actual"] = actual
+            saved["inside"] = bool(saved["low"] <= actual <= saved["high"])
+        elif when < (now.date() - datetime.timedelta(days=5)).isoformat():
+            saved["inside"] = None   # no closing rate came on that day, for example a holiday
+    judged = [r for r in history["week"].values() if isinstance(r, dict) and isinstance(r.get("inside"), bool)]
+    if outlook:
+        outlook["live_total"], outlook["live_inside"] = len(judged), sum(1 for r in judged if r["inside"])
+        if outlook["target"] not in history["week"]:   # the first range made for a day is the one that is checked
+            history["week"][outlook["target"]] = {"made": outlook["made"], "low": outlook["low"],
+                                                  "high": outlook["high"], "middle": outlook["middle"]}
+
+    # 6. keep the history small
+    for key, keep in (("fixes", 400), ("spot_at_fix", 60), ("estimates", 200), ("week", 200)):
         for old in sorted(history[key])[:-keep]:
             del history[key][old]
 
-    # 6. the earlier rates to compare with
+    # 7. the earlier rates to compare with
     earlier = fixes[:-1]
     previous = earlier[-1] if earlier else None
     closes = [fix for fix in earlier if fix[1] == "PM" and fix[0] < date]
@@ -384,7 +449,8 @@ def build(cfg, history, now, sources):
             "latest": latest, "fresh": fresh, "day_before": closes[-1] if closes else previous,
             "previous": previous, "week": week, "month": back(30),
             "oldest": earlier[0] if len(earlier) >= 3 and not week else None,
-            "estimate": estimate, "target": target, "record_text": record_text, "notes": notes,
+            "estimate": estimate, "outlook": outlook, "target": target, "record_text": record_text,
+            "notes": notes,
             "count": len(fixes), "spot_now": spot_now}
 
 
@@ -417,6 +483,58 @@ def estimate_lines(cfg, view):
                rupees(estimate["low"] / 10.0), rupees(estimate["high"] / 10.0)),
             "Why: %s." % why,
             "Check: %s" % (view["record_text"] or "there is no record yet. The first estimates are rough.")]
+
+
+def fell_or_rose(value):
+    return "%s %.1f%%" % ("rose" if value > 0 else "fell", abs(value))
+
+
+def forecast_lines(cfg, view):
+    """The lines about the price range of the model for about 7 days ahead."""
+    outlook = view["outlook"]
+    if not outlook:
+        return []
+    official = rupees(outlook["official"] / 10.0)
+    lines = ["Closing rate of %s: %d times out of 10 between %s and %s for 1 gram of %s." % (
+        day_name(outlook["target"], view["now"]), round(outlook["level"] * 10), rupees(outlook["low"] / 10.0),
+        rupees(outlook["high"] / 10.0), cfg["main_name"])]
+    lower = outlook["chance_lower"]
+    if 0.4 < lower < 0.6:
+        lines.append("Higher or lower than the last official rate (%s): the chances are about equal." % official)
+    else:
+        share = min(95, int(round(max(lower, 1 - lower) * 20)) * 5)
+        moved = view["estimate"]["move_percent"] if view["estimate"] else 0
+        why = ""
+        if (lower >= 0.6 and moved < 0) or (lower <= 0.4 and moved > 0):
+            why = " The world price already %s after that rate." % ("fell" if moved < 0 else "rose")
+        lines.append("Chance that it is %s than the last official rate (%s): about %d%%.%s" % (
+            "lower" if lower >= 0.6 else "higher", official, share, why))
+    size = outlook["move_now"] / outlook["move_normal"] if outlook["move_normal"] else 1
+    lines.append("Market now: %s. The world price moves about %.1f%% a day; a normal day is %.1f%%. "
+                 "In one week it %s, in one month it %s." % (
+                     "big swings" if size >= 1.3 else ("calm" if size <= 0.8 else "normal swings"),
+                     outlook["move_now"], outlook["move_normal"], fell_or_rose(outlook["change_week"]),
+                     fell_or_rose(outlook["change_month"])))
+    test = "Test: on %d past days that the model had not seen, the real price was inside the range %d%% of " \
+           "the time." % (outlook["tested"], round(100.0 * outlook["inside"] / outlook["tested"]))
+    if outlook["live_total"]:
+        test += " In real use so far: inside in %d of %d." % (outlook["live_inside"], outlook["live_total"])
+    lines.append(test)
+    lines.append("The model gives a range, not a direction: in tests on 5 years of prices no model could say "
+                 "up or down better than chance.")
+    return lines
+
+
+def caution(view):
+    """The plain warning under the estimate and the forecast, or '' when there is neither."""
+    shown = [name for name, part in (("estimate", view["estimate"]), ("forecast", view["outlook"])) if part]
+    if len(shown) == 2:
+        return "The estimate and the forecast are calculations from world gold prices. %s They are not " \
+               "advice to buy or sell." % CAUTION
+    if shown:
+        return "The %s is a calculation from world gold prices. %s It is not advice to buy or sell." % (
+            shown[0], CAUTION)
+    return ""
 
 
 def headline_change(cfg, view, short=False):
@@ -475,10 +593,14 @@ def make_markdown(cfg, view):
     lines = estimate_lines(cfg, view)
     if lines:
         out += ["", "**Estimate**", ""] + ["- " + line for line in lines]
+    lines = forecast_lines(cfg, view)
+    if lines:
+        out += ["", "**Forecast for %d days** (tested model)" % cfg["forecast_days"], ""] \
+            + ["- " + line for line in lines]
     for note in view["notes"]:
         out += ["", note]
-    if view["estimate"]:
-        out += ["", CAUTION]
+    if caution(view):
+        out += ["", caution(view)]
     out += ["", "Sources: [IBJA](https://ibjarates.com/) for the official rates of India, "
             "[xaus.com](https://xaus.com/) for the world gold price.", ""]
     return "\n".join(out)
@@ -535,10 +657,18 @@ def make_html(cfg, view):
                    'margin-top:18px;"><div style="font-weight:600;margin-bottom:4px;">Estimate</div>')
         out += ['<div style="font-size:15px;margin:4px 0;">%s</div>' % esc(line) for line in lines]
         out.append("</div>")
+    lines = forecast_lines(cfg, view)
+    if lines:
+        out.append('<div style="background:#eef6ff;border-left:4px solid #0969da;padding:10px 14px;'
+                   'margin-top:14px;"><div style="font-weight:600;margin-bottom:4px;">Forecast for %d days '
+                   '<span style="font-weight:400;color:#59636e;">(tested model)</span></div>'
+                   % int(cfg["forecast_days"]))
+        out += ['<div style="font-size:15px;margin:4px 0;">%s</div>' % esc(line) for line in lines]
+        out.append("</div>")
     for note in view["notes"]:
         out.append('<p style="font-size:14px;color:#9a6700;">%s</p>' % esc(note))
-    if view["estimate"]:
-        out.append('<p style="font-size:12px;color:#59636e;margin-top:18px;">%s</p>' % esc(CAUTION))
+    if caution(view):
+        out.append('<p style="font-size:12px;color:#59636e;margin-top:18px;">%s</p>' % esc(caution(view)))
     out.append('<p style="font-size:12px;color:#59636e;">Sources: <a href="https://ibjarates.com/" '
                'style="color:#0969da;">IBJA</a> for the official rates of India, '
                '<a href="https://xaus.com/" style="color:#0969da;">xaus.com</a> for the world gold price. '
@@ -575,7 +705,7 @@ def main(argv=None):
     now = datetime.datetime.fromisoformat(args.now).astimezone(IST) if args.now \
         else datetime.datetime.now(IST)
     say("Gold Rate Alert %s, %s India time" % (VERSION, now.strftime("%d %b %Y %I:%M %p")))
-    sources, source_report = read_sources(cfg)
+    sources, source_report = read_sources(cfg, now)
     for line in source_report:
         say("  %-28s %s" % (line["source"], "ok" if line["ok"] else "FAILED " + line.get("error", "")))
 
@@ -596,7 +726,7 @@ def main(argv=None):
     report.update({"title": title, "latest_rate": view["latest"], "new_rate": view["fresh"],
                    "rates_saved": view["count"],
                    "price_1_gram": int(round(view["values"][cfg["main_purity"]] / 10.0)),
-                   "estimate": view["estimate"], "notes": view["notes"],
+                   "estimate": view["estimate"], "forecast": view["outlook"], "notes": view["notes"],
                    "total_items": 1 if (changed or cfg["email_when_nothing_changed"]) else 0})
     write_text(out_dir / "latest.md", make_markdown(cfg, view))
     write_text(out_dir / "latest.html", make_html(cfg, view))
@@ -604,7 +734,7 @@ def main(argv=None):
     write_text(out_dir / "last_run.json", json.dumps(report, indent=2) + "\n")
     say("")
     say(title)
-    for line in change_lines(cfg, view) + estimate_lines(cfg, view) + view["notes"]:
+    for line in change_lines(cfg, view) + estimate_lines(cfg, view) + forecast_lines(cfg, view) + view["notes"]:
         say("  " + line)
     say("")
     say("Saved in %s" % out_dir)

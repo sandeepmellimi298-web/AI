@@ -1,0 +1,32 @@
+name: Gold model lab (manual)
+
+# Tests forecast models on about 5 years of real gold prices and shows the scores as notices.
+# It also tries advanced AI models (boosted trees, a random forest, neural networks).
+# Nothing is saved in the repository and no email is sent. It takes about 10 minutes.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_REF_NAME}"
+          git checkout -q -B "${GITHUB_REF_NAME}" FETCH_HEAD
+
+      # The two libraries are only needed for this test. The alert itself does not use them.
+      - name: Install the test libraries on this machine of GitHub
+        run: |
+          python3 -m venv /tmp/lab
+          /tmp/lab/bin/python -m pip install --quiet --disable-pip-version-check numpy scikit-learn
+          /tmp/lab/bin/python -c "import numpy, sklearn; print('numpy', numpy.__version__, 'scikit-learn', sklearn.__version__)"
+
+      - name: Test the models on the real prices
+        run: /tmp/lab/bin/python gold-rate-alert/gold_lab.py --notices

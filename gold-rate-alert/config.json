@@ -3,6 +3,7 @@
   "spot_url": "https://xaus.com/api/v1/spot?currency=INR&unit=gram",
   "intraday_url": "https://xaus.com/api/v1/intraday?symbol=xau&hours=48",
   "backup_spot_url": "https://api.gold-api.com/price/XAU",
+  "history_url": "https://xaus.com/api/v1/history",
   "main_purity": "916",
   "main_name": "22K",
   "grams": [
@@ -20,6 +21,8 @@
     "17:00"
   ],
   "first_range_percent": 1.0,
+  "forecast": true,
+  "forecast_days": 7,
   "email_when_nothing_changed": true,
   "timeout_seconds": 40,
   "user_agent": "gold-rate-alert/1.0 (personal daily alert)"
