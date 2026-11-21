@@ -1,0 +1,39 @@
+{
+  "program": "Gold Rate Alert 1.0",
+  "finished": "2026-11-21T06:25:50+00:00",
+  "sources": [
+    {
+      "source": "official rates",
+      "ok": true
+    },
+    {
+      "source": "world price",
+      "ok": true
+    },
+    {
+      "source": "world price, last 2 days",
+      "ok": true
+    }
+  ],
+  "total_items": 1,
+  "title": "Gold 22K: \u20b911,349 for 1 gram, \u25bc \u20b9516 (Sat 21 Nov, 11:55 AM)",
+  "latest_rate": "2026-11-20 PM",
+  "new_rate": true,
+  "rates_saved": 8,
+  "price_1_gram": 11349,
+  "estimate": {
+    "made": "2026-11-21T11:55:50+05:30",
+    "value": 111931,
+    "low": 110811,
+    "high": 113050,
+    "move_percent": -1.37,
+    "spread_percent": 1.0,
+    "spot_then": 3588.18,
+    "spot_now": 3539.0,
+    "target": "2026-11-23 AM",
+    "actual": null
+  },
+  "notes": [
+    "Today is Saturday. There is no new official rate on Saturday and Sunday, and the world gold market is closed. The next official rate comes on Monday 23 Nov at about 12 noon."
+  ]
+}
