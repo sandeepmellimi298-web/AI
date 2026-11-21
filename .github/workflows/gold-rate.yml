@@ -1,0 +1,112 @@
+name: Gold Rate Alert
+
+on:
+  schedule:
+    # Times here are in UTC. India time (IST) is 5 hours 30 minutes later.
+    # 03:17 UTC is 8:47 AM and 10:17 UTC is 3:47 PM in India. GitHub often starts scheduled
+    # jobs late, and most of all at round times such as :00 and :30. So these two start a
+    # little before 9:00 AM and 4:00 PM.
+    - cron: "17 3 * * *"
+    - cron: "17 10 * * *"
+    # The backup starts, one hour later, because GitHub sometimes does not start a scheduled
+    # job at all. They do nothing when the first start has done the work (see "check").
+    - cron: "17 4 * * *"
+    - cron: "17 11 * * *"
+  workflow_dispatch:   # adds a "Run workflow" button, to run it by hand
+    inputs:
+      like_schedule:
+        description: "Test only: act like a scheduled start"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # to save the alert in this repository
+  issues: write     # to open the issue that GitHub emails to you
+
+# Two starts of this job never run at the same time: the second one waits for the first.
+concurrency:
+  group: gold-rate-alert
+  cancel-in-progress: false
+
+env:
+  APP_DIR: gold-rate-alert
+
+jobs:
+  # A scheduled start does nothing when the last run finished less than 3 hours ago.
+  # A start by hand always runs.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      go: ${{ steps.decide.outputs.go }}
+    steps:
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_REF_NAME}"
+          git checkout -q -B "${GITHUB_REF_NAME}" FETCH_HEAD
+
+      - name: Is there work to do
+        id: decide
+        env:
+          LIKE_SCHEDULE: ${{ inputs.like_schedule }}
+        run: python3 cloud/should_run.py
+
+  alert:
+    needs: check
+    # Only a clear "no" from the check stops this job. If the check itself fails, it runs.
+    if: ${{ !cancelled() && needs.check.outputs.go != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
+      TZ: Asia/Kolkata
+      # "true": each alert is opened as an issue and GitHub emails it to you.
+      # Set it to "false" to stop these issues.
+      NOTIFY_BY_ISSUE: "true"
+    steps:
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_REF_NAME}"
+          git checkout -q -B "${GITHUB_REF_NAME}" FETCH_HEAD
+
+      # The program only reads two public websites. It does not need the token of this job.
+      - name: Read the gold rates and build the alert
+        env:
+          GH_TOKEN: ""
+          GITHUB_TOKEN: ""
+        run: python3 "${APP_DIR}/gold_rate.py"
+
+      - name: Save the alert in this repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f "${APP_DIR}/out"
+          if git diff --cached --quiet; then
+            echo "Nothing new to save."
+          else
+            git commit -q -m "Gold Rate Alert $(date +%F), $(date +%H:%M)"
+            # Another daily job can save at the same moment. Then its commit is taken in
+            # first, and the save is tried again.
+            for try in 1 2 3 4; do
+              if git push -q origin "HEAD:${GITHUB_REF_NAME}"; then
+                break
+              fi
+              if [ "${try}" = "4" ]; then
+                echo "The alert could not be saved."
+                exit 1
+              fi
+              sleep $((try * 5))
+              git pull -q --rebase origin "${GITHUB_REF_NAME}"
+            done
+          fi
+
+      - name: Email the alert to you through a GitHub issue
+        if: env.NOTIFY_BY_ISSUE == 'true'
+        run: python3 cloud/post_issue.py

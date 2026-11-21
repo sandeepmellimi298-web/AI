@@ -1,0 +1,26 @@
+{
+  "ibja_url": "https://ibjarates.com/",
+  "spot_url": "https://xaus.com/api/v1/spot?currency=INR&unit=gram",
+  "intraday_url": "https://xaus.com/api/v1/intraday?symbol=xau&hours=48",
+  "backup_spot_url": "https://api.gold-api.com/price/XAU",
+  "main_purity": "916",
+  "main_name": "22K",
+  "grams": [
+    1,
+    8,
+    10
+  ],
+  "gst_percent": 3,
+  "opening_window": [
+    "11:30",
+    "12:00"
+  ],
+  "closing_window": [
+    "16:30",
+    "17:00"
+  ],
+  "first_range_percent": 1.0,
+  "email_when_nothing_changed": true,
+  "timeout_seconds": 40,
+  "user_agent": "gold-rate-alert/1.0 (personal daily alert)"
+}

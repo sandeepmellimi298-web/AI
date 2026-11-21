@@ -1,6 +1,6 @@
 name: Gold test (manual)
 
-# Checks from GitHub that the price sources of the Gold Rate Alert can be read.
+# Runs the Gold Rate Alert program on GitHub and shows the result as notices.
 # Nothing is saved in the repository and no email is sent.
 on:
   workflow_dispatch:
@@ -12,50 +12,48 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      TZ: Asia/Kolkata
     steps:
-      - name: Read the price sources
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_REF_NAME}"
+          git checkout -q -B "${GITHUB_REF_NAME}" FETCH_HEAD
+
+      - name: Run the program on a copy of the saved results
+        run: |
+          mkdir -p /tmp/gold-test/out
+          cp -r gold-rate-alert/out/. /tmp/gold-test/out/ 2>/dev/null || true
+          python3 gold-rate-alert/gold_rate.py --out /tmp/gold-test/out
+
+      - name: Show the result
+        if: always()
         run: |
           python3 - <<'PY'
-          import json, re, urllib.request
-          BROWSER = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
-          def get(url, agent=BROWSER):
-              try:
-                  request = urllib.request.Request(url, headers={"User-Agent": agent, "Accept": "*/*", "Accept-Language": "en"})
-                  with urllib.request.urlopen(request, timeout=40) as response:
-                      return str(response.status), response.read().decode("utf-8", "replace")
-              except Exception as exc:
-                  return "ERROR %s %s" % (getattr(exc, "code", ""), str(exc)[:80]), ""
-          lines = []
-          for name, url, agent in (("IBJA", "https://ibjarates.com/", BROWSER), ("IBJA www", "https://www.ibjarates.com/", BROWSER),
-                                   ("IBJA plain agent", "https://ibjarates.com/", "gold-rate-alert/1.0 (personal daily alert)")):
-              status, text = get(url, agent)
-              rows = re.findall(r'data-label="(AM|PM)"><strong>([0-9/]+)</strong></td>(.*?)</tr>', text, re.S)
-              first = ["%s %s 916=%s" % (kind, day, "".join(re.findall(r'data-label="Gold 916">\s*([0-9]+)', cells)[:1])) for kind, day, cells in rows[:8]]
-              span = re.findall(r'id="GoldRatesCompare916">\s*([0-9]+)', text)
-              lines.append("%s: %s, %d bytes, rows %d, per gram 916 %s, %s" % (name, status, len(text), len(rows), span[:1], first))
-          for name, url in (("xaus spot", "https://xaus.com/api/v1/spot?currency=INR&unit=gram&compact=1"),
-                            ("xaus intraday", "https://xaus.com/api/v1/intraday?symbol=xau&hours=48"),
-                            ("xaus history", "https://xaus.com/api/v1/history"),
-                            ("gold-api", "https://api.gold-api.com/price/XAU"),
-                            ("yahoo gold", "https://query1.finance.yahoo.com/v8/finance/chart/GC=F?interval=60m&range=5d"),
-                            ("yahoo inr", "https://query1.finance.yahoo.com/v8/finance/chart/INR=X?interval=60m&range=5d"),
-                            ("frankfurter", "https://api.frankfurter.dev/v1/latest?base=USD&symbols=INR"),
-                            ("er-api", "https://open.er-api.com/v6/latest/USD")):
-              status, text = get(url)
-              note = text[:160].replace("\n", " ")
-              try:
-                  data = json.loads(text)
-                  if "points" in data:
-                      note = "%d points, last %s, keys %s" % (len(data["points"]), data["points"][-1:], [k for k in data if k != "points"][:8])
-                  elif "chart" in data:
-                      result = data["chart"]["result"][0]
-                      note = "%d bars, price %s" % (len(result.get("timestamp") or []), result["meta"].get("regularMarketPrice"))
-                  elif "rates" in data:
-                      note = "INR %s, date %s" % (data["rates"].get("INR"), data.get("date") or data.get("time_last_update_utc"))
-              except Exception:
-                  pass
-              lines.append("%s: %s, %d bytes, %s" % (name, status, len(text), note))
-          message = "\n".join(lines)
-          print(message)
-          print("::notice title=Gold test sources::" + message.replace("%", "%25").replace("\n", "%0A"))
+          import json, pathlib, sys
+          sys.path.insert(0, "cloud")
+          import post_issue
+          out = pathlib.Path("/tmp/gold-test/out")
+          def notice(title, text):
+              print(text)
+              print("::notice title=%s::%s" % (title, text.replace("%", "%25").replace("\r", "").replace("\n", "%0A")))
+          try:
+              report = json.loads((out / "last_run.json").read_text(encoding="utf-8"))
+              markdown = (out / "latest.md").read_text(encoding="utf-8")
+              history = json.loads((out / "history.json").read_text(encoding="utf-8"))
+          except (OSError, ValueError) as exc:
+              notice("Gold test failed", "No result to show: %s" % exc)
+              sys.exit(1)
+          notice("Gold test 1 sources", "\n".join("%s: %s %s" % (s["source"], "ok" if s["ok"] else "FAILED", s.get("error", ""))
+                                                    for s in report["sources"]))
+          notice("Gold test 2 alert", markdown)
+          title, body = post_issue.build_issue(report, markdown, "owner")
+          notice("Gold test 3 email", "title: %s\nfirst line: %s\nlast line: %s\nestimate: %s"
+                 % (title, body.splitlines()[0], body.splitlines()[-1], json.dumps(report.get("estimate"))))
+          notice("Gold test 4 saved", "official rates: %s\nworld price at these rates: %s" % (
+              ", ".join("%s %s 916=%s 999=%s" % (day, part, values.get("916"), values.get("999"))
+                        for day in sorted(history["fixes"]) for part, values in sorted(history["fixes"][day].items())),
+              json.dumps(history["spot_at_fix"], sort_keys=True)))
           PY
