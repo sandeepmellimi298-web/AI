@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "finished": "2026-11-20T16:49:15+00:00",
+  "finished": "2026-11-21T03:37:59+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
-  "total_items": 25,
+  "total_items": 24,
   "sections": {
-    "releases": 4,
+    "releases": 3,
     "tools": 5,
     "community": 5,
     "code": 5,
@@ -17,24 +17,24 @@
       "source": "Hacker News",
       "ok": true,
       "optional": false,
-      "fetched": 16,
-      "kept": 3,
-      "seconds": 1.0
+      "fetched": 17,
+      "kept": 4,
+      "seconds": 0.7
     },
     {
       "source": "GitHub",
       "ok": true,
       "optional": false,
       "fetched": 69,
-      "kept": 11,
-      "seconds": 14.3
+      "kept": 12,
+      "seconds": 13.3
     },
     {
       "source": "OpenAI",
       "ok": true,
       "optional": false,
-      "fetched": 1418,
-      "kept": 1,
+      "fetched": 1421,
+      "kept": 2,
       "seconds": 0.2
     },
     {
@@ -42,7 +42,7 @@
       "ok": true,
       "optional": false,
       "fetched": 20,
-      "kept": 2,
+      "kept": 0,
       "seconds": 0.2
     },
     {
@@ -73,9 +73,9 @@
       "source": "Hugging Face",
       "ok": true,
       "optional": false,
-      "fetched": 914,
+      "fetched": 915,
       "kept": 1,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "source": "Anthropic news (community feed)",
@@ -90,8 +90,8 @@
       "ok": true,
       "optional": false,
       "fetched": 30,
-      "kept": 2,
-      "seconds": 0.2
+      "kept": 1,
+      "seconds": 0.1
     },
     {
       "source": "Azure Integration Services blog",
@@ -105,25 +105,25 @@
       "source": "Azure updates",
       "ok": true,
       "optional": false,
-      "fetched": 25,
+      "fetched": 30,
       "kept": 1,
-      "seconds": 0.2
+      "seconds": 0.3
     },
     {
       "source": "News: Logic Apps and AI",
       "ok": true,
       "optional": true,
       "fetched": 1,
-      "kept": 1,
-      "seconds": 0.3
+      "kept": 0,
+      "seconds": 0.2
     },
     {
       "source": "News: SAP Integration Suite and AI",
       "ok": true,
       "optional": true,
-      "fetched": 3,
+      "fetched": 4,
       "kept": 1,
-      "seconds": 0.4
+      "seconds": 0.2
     },
     {
       "source": "News: TIBCO, MuleSoft and AI",
@@ -131,12 +131,28 @@
       "optional": true,
       "fetched": 8,
       "kept": 1,
-      "seconds": 0.4
+      "seconds": 0.2
     }
   ],
-  "digest_file": "/home/runner/work/AI/AI/ai-updates-digest/out/digest-2026-11-20.html",
+  "digest_file": "/home/runner/work/AI/AI/ai-updates-digest/out/digest-2026-11-21.html",
   "email": {
     "attempted": false,
     "sent": false
+  },
+  "ai": {
+    "ok": true,
+    "model": "phi4-mini",
+    "items": 24,
+    "picks": 5,
+    "sentences": 4,
+    "by_meaning": true,
+    "files": [
+      "digest-2026-11-21.html",
+      "digest-2026-11-21.md",
+      "latest.html",
+      "latest.md"
+    ],
+    "notes": [],
+    "seconds": 30.1
   }
 }
