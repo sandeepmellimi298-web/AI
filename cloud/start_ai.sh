@@ -9,6 +9,16 @@ SHA256="87bfafb2acbc89b2e6a1be0a9043de6aa75fb450696f86bc426e65fc448f788d"
 CHAT_MODEL="phi4-mini"
 EMBED_MODEL="all-minilm"
 
+# In the daily jobs APP_DIR is set. The model has to pick and explain items, so on a day
+# with fewer than 2 new items it is not needed, and nothing is downloaded.
+if [ -n "${APP_DIR:-}" ]; then
+  ITEMS="$(python3 -c 'import json, sys; print(int(json.load(open(sys.argv[1], encoding="utf-8")).get("total_items") or 0))' "$APP_DIR/out/last_run.json" 2>/dev/null || echo 0)"
+  if [ "$ITEMS" -lt 2 ]; then
+    echo "Only $ITEMS new item(s) today, so the AI model is not started."
+    exit 0
+  fi
+fi
+
 DIR="$RUNNER_TEMP/ollama"
 mkdir -p "$DIR"
 cd "$DIR"
