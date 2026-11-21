@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "ollama_url": "http://127.0.0.1:11434",
+  "chat_model": "phi4-mini",
+  "embed_model": "all-minilm",
+  "download_missing_models": true,
+  "top_picks": 3,
+  "max_picks_per_section": 2,
+  "max_items_for_summary": 30,
+  "reader": "A person in India who looks for a bank job. Most useful: new recruitment notices with many posts that are open for applications now, for example probationary officer, clerk, apprentice and specialist officer."
+}

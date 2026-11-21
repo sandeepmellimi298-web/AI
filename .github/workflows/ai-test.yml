@@ -1,0 +1,32 @@
+name: AI test (manual)
+
+# Tries the AI step on copies of the last saved digests.
+# Nothing is saved in the repository and no email is sent.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://github.com/$GITHUB_REPOSITORY.git"
+          git fetch -q --depth 1 origin "$GITHUB_REF_NAME"
+          git checkout -q -B "$GITHUB_REF_NAME" FETCH_HEAD
+
+      - name: Start the small AI model (no account, no key)
+        run: bash cloud/start_ai.sh
+
+      - name: Try the AI step on both digests
+        run: |
+          for app in bank-jobs-alert ai-updates-digest; do
+            cp -r "$app/out" "$RUNNER_TEMP/$app-out"
+            python3 "$app/ai_brief.py" --out "$RUNNER_TEMP/$app-out"
+            python3 -c 'import json,pathlib,sys; out=pathlib.Path(sys.argv[2]); t=(out/"latest.md").read_text(encoding="utf-8"); a=t.find("<!-- ai-brief:start -->"); b=t.find("<!-- ai-brief:end -->"); r=json.loads((out/"last_run.json").read_text(encoding="utf-8")).get("ai"); m=json.dumps(r)+"\n"+(t[a:b] if a>=0 else "NO AI BLOCK"); print(m); print("::notice title=AI test "+sys.argv[1]+"::"+m.replace("%","%25").replace("\n","%0A"))' "$app" "$RUNNER_TEMP/$app-out"
+          done

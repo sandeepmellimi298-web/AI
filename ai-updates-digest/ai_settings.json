@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "ollama_url": "http://127.0.0.1:11434",
+  "chat_model": "phi4-mini",
+  "embed_model": "all-minilm",
+  "download_missing_models": true,
+  "top_picks": 5,
+  "max_picks_per_section": 2,
+  "max_items_for_summary": 30,
+  "reader": "An integration architect who is learning AI. Most useful: new AI models and tools, AI agents, MCP, reusable code and templates, and AI for Azure Logic Apps, Azure API Management and SAP integration."
+}
