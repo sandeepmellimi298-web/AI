@@ -2,8 +2,8 @@
 """AI brief.
 
 A small AI model that runs on this machine reads the newest digest in the folder
-"out", picks the items that matter most by meaning, and writes a short summary
-at the top. It works for the AI Updates Digest and for the Bank Jobs Alert.
+"out", picks the items that matter most by meaning, and writes one short line
+about the first of them at the top. It works for the AI Updates Digest and for the Bank Jobs Alert.
 
 The model runs through Ollama (https://ollama.com). There is no account, no key
 and no outside AI service. If Ollama or the model is missing, nothing is changed.
@@ -25,7 +25,7 @@ import urllib.error
 import urllib.request
 import webbrowser
 
-VERSION = "1.0"
+VERSION = "1.1"
 HERE = pathlib.Path(__file__).resolve().parent
 START, END = "<!-- ai-brief:start -->", "<!-- ai-brief:end -->"
 DEFAULTS = {
@@ -36,20 +36,13 @@ DEFAULTS = {
     "download_missing_models": True,
     "top_picks": 5,
     "max_picks_per_section": 2,
-    "max_items_for_summary": 30,
+    "explain_top": 3,
     "reader": "A reader who wants the most important and most useful items of today.",
 }
-SKIP_SECTIONS = ("in 30 seconds", "ai summary")
+SKIP_SECTIONS = ("in 30 seconds", "ai picks")
 LINK_RE = re.compile(r"\[([^\]]+)\]\((https?://[^)\s]+)\)")
-SCHEMA = {
-    "type": "object",
-    "properties": {"bullets": {"type": "array", "minItems": 1, "maxItems": 3, "items": {
-        "type": "object",
-        "properties": {"text": {"type": "string"},
-                       "items": {"type": "array", "items": {"type": "integer"}}},
-        "required": ["text", "items"]}}},
-    "required": ["bullets"],
-}
+SCHEMA = {"type": "object", "properties": {"sentence": {"type": "string"}},
+          "required": ["sentence"]}
 
 
 def say(text=""):
@@ -110,7 +103,7 @@ class Ollama:
         answer = self.call("/api/chat", {
             "model": model, "stream": False, "format": SCHEMA,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-            "options": {"temperature": 0.2, "num_ctx": 4096, "num_predict": 400},
+            "options": {"temperature": 0.2, "num_ctx": 2048, "num_predict": 120},
         }, timeout=900)
         return (answer.get("message") or {}).get("content", "")
 
@@ -154,7 +147,7 @@ def read_items(markdown):
 
 
 # --------------------------------------------------------------------------
-# The two AI jobs: pick by meaning, and write the summary
+# The two AI jobs: pick by meaning, and explain a pick in one line
 # --------------------------------------------------------------------------
 
 def pick_by_meaning(ai, cfg, items):
@@ -176,86 +169,68 @@ def pick_by_meaning(ai, cfg, items):
     return [items[i] for i in picks]
 
 
-def clean_bullet(text):
+def clean_sentence(text):
     text = re.sub(r"https?://\S+", "", str(text))
+    text = re.sub(r"[(\[]\s*\d+(?:\s*,\s*\d+)*\s*[)\]]", " ", text)  # item numbers such as (1)
     text = re.sub(r"<[^>]*>", " ", text)
-    text = re.sub(r"[\[\]()<>*_#|]", " ", text)
+    text = re.sub(r"[\[\]()<>*_#|\"]", " ", text)
     text = re.sub(r"\s+", " ", text).strip(" -")
     return text[:240]
 
 
-def write_summary(ai, cfg, items):
-    items = items[:int(cfg["max_items_for_summary"])]
-    listing = "\n".join("%d. [%s] %s. %s" % (n, item["section"], item["title"], item["note"])
-                        for n, item in enumerate(items, 1))
-    system = ("You write very short news summaries in simple English. Use only facts from the "
-              "list. Never add a fact, a number, a date or a link that is not in the list.")
-    user = ("Reader: %s\n\nItems of today:\n%s\n\nWrite 3 short sentences for this reader about "
-            "the most important items. Each sentence has at most 25 words and is plain text "
-            "without links. For each sentence give the numbers of the items you used.\n"
-            'Answer as JSON: {"bullets": [{"text": "...", "items": [1]}]}'
-            % (cfg["reader"], listing))
+def explain(ai, cfg, item):
+    """One plain sentence about one item, or "" when the answer cannot be trusted."""
+    system = ("You explain one news item in one short sentence in simple English. Use only what "
+              "the item says. Never add a fact, a number, a date, a link or advice.")
+    user = ("Item: %s\nDetails: %s\n\nWrite one sentence of at most 25 words that says in plain "
+            "words what this item is about.\n"
+            'Answer as JSON: {"sentence": "..."}' % (item["title"], item["note"] or "none"))
     try:
         answer = json.loads(ai.chat(cfg["chat_model"], system, user))
     except ValueError:
-        raise AiError("the AI model did not answer in the asked form")
-    bullets = []
-    for bullet in (answer.get("bullets") or [])[:3]:
-        if not isinstance(bullet, dict):
-            continue
-        used = [items[n - 1] for n in bullet.get("items") or []
-                if isinstance(n, int) and 1 <= n <= len(items)][:2]
-        text = clean_bullet(bullet.get("text", ""))
-        source = " ".join("%s %s" % (item["title"], item["note"]) for item in used)
-        numbers = re.findall(r"\d[\d,.]*\d|\d", text)
-        known = re.sub(r"[,.]", "", source)
-        if len(text) < 15 or not used:
-            continue
-        if any(re.sub(r"[,.]", "", number) not in known for number in numbers):
-            continue  # a number that is not in the cited items: do not trust this sentence
-        bullets.append({"text": text, "items": used})
-    return bullets
+        return ""
+    text = clean_sentence(answer.get("sentence", "") if isinstance(answer, dict) else "")
+    known = re.sub(r"[,.]", "", "%s %s" % (item["title"], item["note"]))
+    numbers = re.findall(r"\d[\d,.]*\d|\d", text)
+    if len(text) < 15 or any(re.sub(r"[,.]", "", number) not in known for number in numbers):
+        return ""  # too short, or a number that is not in the item: do not trust it
+    return text
 
 
 # --------------------------------------------------------------------------
 # Writing the AI part into the files
 # --------------------------------------------------------------------------
 
-def block_markdown(bullets, picks, model):
-    out = [START, "## AI summary", ""]
-    for bullet in bullets:
-        links = ", ".join("[source](%s)" % item["url"] for item in bullet["items"])
-        out.append("- %s (%s)" % (bullet["text"], links))
-    if picks:
-        out += ["", "**Top picks by meaning**", ""]
-        out += ["%d. [%s](%s)" % (n, item["title"].replace("[", "(").replace("]", ")"), item["url"])
-                for n, item in enumerate(picks, 1)]
-    out += ["", "*Written by a small AI model (%s) that ran inside this job, with no outside "
-            "AI service. It can make mistakes, so check the links.*" % model, END, "", ""]
+def footer(model, by_meaning):
+    how = ("picked these items by meaning and wrote the short lines" if by_meaning
+           else "wrote the short lines")
+    return ("A small AI model (%s) %s. It ran on this machine, with no outside AI service. "
+            "It can make mistakes, so check the links." % (model, how))
+
+
+def block_markdown(picks, model, by_meaning):
+    out = [START, "## AI picks", ""]
+    for n, item in enumerate(picks, 1):
+        title = item["title"].replace("[", "(").replace("]", ")")
+        line = "%d. [%s](%s)" % (n, title, item["url"])
+        out.append(line + (": " + item["ai"] if item.get("ai") else ""))
+    out += ["", "*%s*" % footer(model, by_meaning), END, "", ""]
     return "\n".join(out)
 
 
-def block_html(bullets, picks, model):
+def block_html(picks, model, by_meaning):
     esc = lambda value: html.escape(str(value), quote=True)
-    link = '<a href="%s" style="color:#0969da;text-decoration:none;">%s</a>'
     out = [START, '<div style="background:#f6f8fa;border-left:4px solid #8250df;'
            'padding:10px 14px;margin:0 0 18px 0;">',
-           '<p style="margin:0 0 6px 0;font-weight:600;">AI summary</p>']
-    if bullets:
-        out.append('<ul style="margin:0;padding-left:20px;">')
-        for bullet in bullets:
-            links = ", ".join(link % (esc(item["url"]), "source") for item in bullet["items"])
-            out.append('<li style="margin:2px 0;">%s (%s)</li>' % (esc(bullet["text"]), links))
-        out.append("</ul>")
-    if picks:
-        out.append('<p style="margin:8px 0 4px 0;font-weight:600;">Top picks by meaning</p>')
-        out.append('<ol style="margin:0;padding-left:20px;">')
-        out += ['<li style="margin:2px 0;">%s</li>' % (link % (esc(item["url"]), esc(item["title"])))
-                for item in picks]
-        out.append("</ol>")
-    out.append('<p style="margin:8px 0 0 0;color:#59636e;font-size:12px;">Written by a small AI '
-               "model (%s) that ran on this machine, with no outside AI service. It can make "
-               "mistakes, so check the links.</p></div>" % esc(model))
+           '<p style="margin:0 0 6px 0;font-weight:600;">AI picks</p>',
+           '<ol style="margin:0;padding-left:20px;">']
+    for item in picks:
+        out.append('<li style="margin:3px 0;"><a href="%s" style="color:#0969da;'
+                   'text-decoration:none;">%s</a>%s</li>'
+                   % (esc(item["url"]), esc(item["title"]),
+                      ": " + esc(item["ai"]) if item.get("ai") else ""))
+    out.append('</ol><p style="margin:8px 0 0 0;color:#59636e;font-size:12px;">%s</p></div>'
+               % esc(footer(model, by_meaning)))
     out.append(END)
     return "\n".join(out) + "\n"
 
@@ -295,40 +270,43 @@ def run(cfg, out_dir):
 
     ai = Ollama(cfg["ollama_url"])
     ai.call("/api/version", timeout=10)
-    picks, bullets, notes = [], [], []
+    picks, notes, by_meaning, sentences = [], [], True, 0
     try:
         ai.need(cfg["embed_model"], cfg["download_missing_models"])
         picks = pick_by_meaning(ai, cfg, items)
     except AiError as exc:
         notes.append("picks: %s" % exc)
+        picks, by_meaning = items[:int(cfg["top_picks"])], False
     try:
         ai.need(cfg["chat_model"], cfg["download_missing_models"])
-        bullets = write_summary(ai, cfg, items)
+        for item in picks[:int(cfg["explain_top"])]:
+            item["ai"] = explain(ai, cfg, item)
+            sentences += 1 if item["ai"] else 0
     except AiError as exc:
-        notes.append("summary: %s" % exc)
-    if not picks and not bullets:
+        notes.append("sentences: %s" % exc)
+    if not by_meaning and not sentences:
         raise AiError("; ".join(notes) or "the AI model gave nothing usable")
 
     changed = []
     for path in {source, out_dir / "latest.md", newest(out_dir, "*-20*.md")}:
         if path and path.exists():
             text = insert_block(path.read_text(encoding="utf-8"),
-                                block_markdown(bullets, picks, cfg["chat_model"]), ["## "])
+                                block_markdown(picks, cfg["chat_model"], by_meaning), ["## "])
             write_text(path, text)
             changed.append(path.name)
     for path in {out_dir / "latest.html", newest(out_dir, "*-20*.html")}:
         if path and path.exists():
             text = insert_block(path.read_text(encoding="utf-8"),
-                                block_html(bullets, picks, cfg["chat_model"]),
+                                block_html(picks, cfg["chat_model"], by_meaning),
                                 ['<div style="background:#f0f6ff', "<h2 "])
             write_text(path, text)
             changed.append(path.name)
-    return {"items": len(items), "picks": len(picks), "bullets": len(bullets),
-            "files": sorted(changed), "notes": notes}
+    return {"items": len(items), "picks": len(picks), "sentences": sentences,
+            "by_meaning": by_meaning, "files": sorted(changed), "notes": notes}
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Add a short AI summary to the newest digest.")
+    parser = argparse.ArgumentParser(description="Add the AI picks to the newest digest.")
     parser.add_argument("--open", action="store_true", help="open the newest page in the browser")
     parser.add_argument("--out", default=str(HERE / "out"), help="folder with the digests")
     parser.add_argument("--settings", default=str(HERE / "ai_settings.json"), help="settings file")
@@ -356,8 +334,8 @@ def main(argv=None):
             report["reason"] = "%s: %s" % (exc.__class__.__name__, exc)
     report["seconds"] = round(time.time() - started, 1)
     if report["ok"]:
-        say("AI part: done in %s seconds. %d sentences and %d picks were added to %s."
-            % (report["seconds"], report["bullets"], report["picks"], ", ".join(report["files"])))
+        say("AI part: done in %s seconds. %d picks with %d AI lines were added to %s."
+            % (report["seconds"], report["picks"], report["sentences"], ", ".join(report["files"])))
     else:
         say("AI part: skipped (%s). The digest is unchanged." % report["reason"])
         if "no answer from the AI program" in report["reason"]:
