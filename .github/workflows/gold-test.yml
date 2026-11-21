@@ -1,0 +1,61 @@
+name: Gold test (manual)
+
+# Checks from GitHub that the price sources of the Gold Rate Alert can be read.
+# Nothing is saved in the repository and no email is sent.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Read the price sources
+        run: |
+          python3 - <<'PY'
+          import json, re, urllib.request
+          BROWSER = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+          def get(url, agent=BROWSER):
+              try:
+                  request = urllib.request.Request(url, headers={"User-Agent": agent, "Accept": "*/*", "Accept-Language": "en"})
+                  with urllib.request.urlopen(request, timeout=40) as response:
+                      return str(response.status), response.read().decode("utf-8", "replace")
+              except Exception as exc:
+                  return "ERROR %s %s" % (getattr(exc, "code", ""), str(exc)[:80]), ""
+          lines = []
+          for name, url, agent in (("IBJA", "https://ibjarates.com/", BROWSER), ("IBJA www", "https://www.ibjarates.com/", BROWSER),
+                                   ("IBJA plain agent", "https://ibjarates.com/", "gold-rate-alert/1.0 (personal daily alert)")):
+              status, text = get(url, agent)
+              rows = re.findall(r'data-label="(AM|PM)"><strong>([0-9/]+)</strong></td>(.*?)</tr>', text, re.S)
+              first = ["%s %s 916=%s" % (kind, day, "".join(re.findall(r'data-label="Gold 916">\s*([0-9]+)', cells)[:1])) for kind, day, cells in rows[:8]]
+              span = re.findall(r'id="GoldRatesCompare916">\s*([0-9]+)', text)
+              lines.append("%s: %s, %d bytes, rows %d, per gram 916 %s, %s" % (name, status, len(text), len(rows), span[:1], first))
+          for name, url in (("xaus spot", "https://xaus.com/api/v1/spot?currency=INR&unit=gram&compact=1"),
+                            ("xaus intraday", "https://xaus.com/api/v1/intraday?symbol=xau&hours=48"),
+                            ("xaus history", "https://xaus.com/api/v1/history"),
+                            ("gold-api", "https://api.gold-api.com/price/XAU"),
+                            ("yahoo gold", "https://query1.finance.yahoo.com/v8/finance/chart/GC=F?interval=60m&range=5d"),
+                            ("yahoo inr", "https://query1.finance.yahoo.com/v8/finance/chart/INR=X?interval=60m&range=5d"),
+                            ("frankfurter", "https://api.frankfurter.dev/v1/latest?base=USD&symbols=INR"),
+                            ("er-api", "https://open.er-api.com/v6/latest/USD")):
+              status, text = get(url)
+              note = text[:160].replace("\n", " ")
+              try:
+                  data = json.loads(text)
+                  if "points" in data:
+                      note = "%d points, last %s, keys %s" % (len(data["points"]), data["points"][-1:], [k for k in data if k != "points"][:8])
+                  elif "chart" in data:
+                      result = data["chart"]["result"][0]
+                      note = "%d bars, price %s" % (len(result.get("timestamp") or []), result["meta"].get("regularMarketPrice"))
+                  elif "rates" in data:
+                      note = "INR %s, date %s" % (data["rates"].get("INR"), data.get("date") or data.get("time_last_update_utc"))
+              except Exception:
+                  pass
+              lines.append("%s: %s, %d bytes, %s" % (name, status, len(text), note))
+          message = "\n".join(lines)
+          print(message)
+          print("::notice title=Gold test sources::" + message.replace("%", "%25").replace("\n", "%0A"))
+          PY
