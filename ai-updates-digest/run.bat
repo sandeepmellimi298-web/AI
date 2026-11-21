@@ -8,7 +8,12 @@ if "%~1"=="" goto default
 %PY% ai_digest.py %*
 goto done
 :default
+if exist ai_brief.py goto withai
 %PY% ai_digest.py --open
+goto done
+:withai
+%PY% ai_digest.py
+%PY% ai_brief.py --open
 goto done
 :nopython
 echo.

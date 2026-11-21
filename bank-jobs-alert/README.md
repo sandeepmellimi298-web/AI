@@ -27,11 +27,25 @@ Other ways to start it, from a command window in this folder:
 Open config.json in Notepad. You can change the news searches, the words, the list of banks
 and the limits.
 
+## The AI picks
+
+After the alert is made, run.bat also starts a small AI model on this computer
+(file ai_brief.py). The model puts a box "AI picks" at the top of the alert: the notices
+that fit a job seeker best, each with one short line.
+
+- It needs the free program Ollama (https://ollama.com), installed and running.
+  Without it this step is skipped and the alert is unchanged.
+- No account and no key are needed. Nothing is sent to an AI service.
+- The first time, it asks before it downloads the model (about 2.5 GB, one time).
+- The model is small and can make mistakes. Check the links.
+- To switch it off, open ai_settings.json in Notepad and set "enabled" to false.
+
 ## The copy on GitHub
 
-The same program runs on GitHub every day at about 8:15 AM India time
-(file .github/workflows/bank-jobs.yml). It saves the alert in this folder under "out"
-and opens an issue, so GitHub emails the alert to the owner of the repository.
+The same program runs on GitHub every day a little after 8:00 AM India time
+(file .github/workflows/bank-jobs.yml). It adds the AI picks, saves the alert in this
+folder under "out" and opens an issue, so GitHub emails the alert to the owner of the
+repository.
 
 ## Important
 

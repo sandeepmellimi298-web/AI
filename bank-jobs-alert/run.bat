@@ -16,7 +16,12 @@ if "%~1"=="" goto default
 %PY% bank_jobs.py %*
 goto done
 :default
+if exist ai_brief.py goto withai
 %PY% bank_jobs.py --open
+goto done
+:withai
+%PY% bank_jobs.py
+%PY% ai_brief.py --open
 goto done
 :nopython
 echo.

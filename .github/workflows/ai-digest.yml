@@ -2,8 +2,9 @@ name: AI Updates Digest
 
 on:
   schedule:
-    # 02:30 UTC is 08:00 AM in India (IST). GitHub can start a few minutes late.
-    - cron: "30 2 * * *"
+    # 02:23 UTC is 07:53 AM in India (IST). GitHub often starts scheduled jobs late, and
+    # most of all at round times such as :00 and :30. So this starts a little before 8:00.
+    - cron: "23 2 * * *"
   workflow_dispatch:   # adds a "Run workflow" button, to run it by hand
 
 permissions:
@@ -17,7 +18,7 @@ concurrency:
 jobs:
   digest:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     env:
       GH_TOKEN: ${{ github.token }}
       GITHUB_TOKEN: ${{ github.token }}
@@ -36,6 +37,29 @@ jobs:
 
       - name: Collect the updates and build the digest
         run: python3 cloud/run_digest.py
+
+      # The AI part: a small free model picks the items that matter most by meaning
+      # and writes one short line about each of them (file ai_brief.py).
+      # If anything here fails, the result is still saved and emailed as before.
+      - name: Start the small AI model (no account, no key)
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          GH_TOKEN: ""
+          GITHUB_TOKEN: ""
+        run: bash cloud/start_ai.sh
+
+      - name: Let the AI model add its picks
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          GH_TOKEN: ""
+          GITHUB_TOKEN: ""
+        run: python3 "${APP_DIR}/ai_brief.py"
+
+      - name: Stop the AI model
+        if: always()
+        run: pkill -f "ollama" || true
 
       - name: Save the digest in this repository
         run: |

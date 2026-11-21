@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Post today's digest as a GitHub issue, so GitHub emails it to the repository owner.
 
-Used only by the GitHub Actions workflow. It does nothing when the digest is empty
-or when the digest was already emailed through Gmail.
+Used only by the GitHub Actions workflow. It does nothing when the digest is empty,
+when the digest was already emailed through Gmail, or when the issue of today is
+already there and holds every link of the new digest (a second run on one day).
 """
 import json
 import os
@@ -13,6 +14,7 @@ import sys
 
 OUT = pathlib.Path(os.environ.get("APP_DIR") or ".") / "out"
 ZERO_WIDTH_SPACE = chr(0x200B)
+LINK_RE = re.compile(r"\]\((https?://[^)\s]+)\)")
 
 
 def build_issue(report, markdown, owner):
@@ -33,6 +35,24 @@ def build_issue(report, markdown, owner):
     return title, body + "\n"
 
 
+def repo_args():
+    name = os.environ.get("GITHUB_REPOSITORY")
+    return ["--repo", name] if name else []
+
+
+def already_posted(title, body):
+    """True when an issue with this title is there and holds every link of the new text."""
+    command = ["gh", "issue", "list", "--state", "all", "--limit", "30", "--json", "title,body"]
+    try:
+        done = subprocess.run(command + repo_args(), capture_output=True, text=True, timeout=120)
+        issues = json.loads(done.stdout)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return False  # when in doubt, post: an email twice is better than no email
+    links = set(LINK_RE.findall(body))
+    return any(isinstance(issue, dict) and issue.get("title") == title
+               and links <= set(LINK_RE.findall(issue.get("body") or "")) for issue in issues)
+
+
 def main():
     try:
         report = json.loads((OUT / "last_run.json").read_text(encoding="utf-8"))
@@ -44,12 +64,14 @@ def main():
     if title is None:
         print(body)
         return 0
+    if already_posted(title, body):
+        print("The issue of today is already there and nothing new came in, "
+              "so no second issue was opened.")
+        return 0
     path = pathlib.Path(os.environ.get("RUNNER_TEMP") or ".") / "digest_issue.md"
     path.write_text(body, encoding="utf-8")
     command = ["gh", "issue", "create", "--title", title, "--body-file", str(path)]
-    if os.environ.get("GITHUB_REPOSITORY"):
-        command += ["--repo", os.environ["GITHUB_REPOSITORY"]]
-    return subprocess.run(command).returncode
+    return subprocess.run(command + repo_args()).returncode
 
 
 if __name__ == "__main__":

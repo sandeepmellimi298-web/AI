@@ -77,11 +77,23 @@ Open **config.json** in a text editor.
 
 If you break the file, delete it: the program then uses its built-in settings.
 
-## 7. What this version does not do
+## 7. The AI picks
 
-It does not write summaries with AI. It shows the title, the numbers (points, comments,
-stars) and the publisher's own first lines. The scheduled task in Claude does write
-summaries. You can keep both; then you get two emails a day.
+After the digest is made, **run.bat** also starts a small AI model on this computer
+(file `ai_brief.py`). The model puts a box "AI picks" at the top of the digest: the items
+that fit you best, each with one short line.
+
+- It needs the free program Ollama (https://ollama.com), installed and running.
+  Without it this step is skipped and the digest is unchanged.
+- No account and no key are needed. Nothing is sent to an AI service.
+- The first time, it asks before it downloads the model (about 2.5 GB, one time).
+- The model is small and can make mistakes. Check the links.
+- To change who the picks are for, edit `reader` in **ai_settings.json**.
+  To switch the step off, set `"enabled": false` there.
+
+The rest of the digest is not written by AI. It shows the title, the numbers (points,
+comments, stars) and the publisher's own first lines. The scheduled task in Claude does
+write summaries. You can keep both; then you get two emails a day.
 
 ## 8. If something goes wrong
 
