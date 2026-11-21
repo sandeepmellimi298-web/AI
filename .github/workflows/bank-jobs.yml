@@ -5,26 +5,62 @@ on:
     # 02:37 UTC is 08:07 AM in India (IST). GitHub often starts scheduled jobs late, and
     # most of all at round times such as :00 and :30.
     - cron: "37 2 * * *"
+    # The backup start, one hour later, because GitHub sometimes does not start a scheduled
+    # job at all. It does nothing when the first start has done the work (see "check").
+    - cron: "37 3 * * *"
   workflow_dispatch:   # adds a "Run workflow" button, to run it by hand
+    inputs:
+      like_schedule:
+        description: "Test only: act like a scheduled start"
+        type: boolean
+        default: false
 
 permissions:
   contents: write   # to save the alert in this repository
   issues: write     # to open the issue that GitHub emails to you
 
-# The same group as the AI Updates Digest, so the two jobs never save at the same moment.
+# Two starts of this job never run at the same time: the second one waits for the first.
 concurrency:
-  group: ai-updates-digest
+  group: bank-jobs-alert
   cancel-in-progress: false
 
+env:
+  APP_DIR: bank-jobs-alert
+
 jobs:
+  # A scheduled start does nothing when the last run finished less than 3 hours ago.
+  # A start by hand always runs.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      go: ${{ steps.decide.outputs.go }}
+    steps:
+      - name: Get the code
+        run: |
+          git init -q .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_REF_NAME}"
+          git checkout -q -B "${GITHUB_REF_NAME}" FETCH_HEAD
+
+      - name: Is there work to do
+        id: decide
+        env:
+          LIKE_SCHEDULE: ${{ inputs.like_schedule }}
+        run: python3 cloud/should_run.py
+
   alert:
+    needs: check
+    # Only a clear "no" from the check stops this job. If the check itself fails, it runs.
+    if: ${{ !cancelled() && needs.check.outputs.go != 'false' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
       GH_TOKEN: ${{ github.token }}
       GITHUB_TOKEN: ${{ github.token }}
       TZ: Asia/Kolkata
-      APP_DIR: bank-jobs-alert
       # "true": each alert is opened as an issue and GitHub emails it to you.
       # Set it to "false" to stop these issues.
       NOTIFY_BY_ISSUE: "true"
@@ -71,7 +107,19 @@ jobs:
             echo "Nothing new to save."
           else
             git commit -q -m "Bank Jobs Alert $(date +%F)"
-            git push -q origin "HEAD:${GITHUB_REF_NAME}"
+            # The other daily job can save at the same moment. Then its commit is taken in
+            # first, and the save is tried again.
+            for try in 1 2 3 4; do
+              if git push -q origin "HEAD:${GITHUB_REF_NAME}"; then
+                break
+              fi
+              if [ "${try}" = "4" ]; then
+                echo "The alert could not be saved."
+                exit 1
+              fi
+              sleep $((try * 5))
+              git pull -q --rebase origin "${GITHUB_REF_NAME}"
+            done
           fi
 
       - name: Email the alert to you through a GitHub issue
