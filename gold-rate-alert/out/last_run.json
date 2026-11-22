@@ -1,6 +1,6 @@
 {
   "program": "Gold Rate Alert 1.1",
-  "finished": "2026-11-22T03:27:16+00:00",
+  "finished": "2026-11-22T10:27:14+00:00",
   "sources": [
     {
       "source": "official rates",
@@ -20,13 +20,13 @@
     }
   ],
   "total_items": 1,
-  "title": "Gold 22K: \u20b911,349 for 1 gram, no new rate (Sun 22 Nov, 9 AM)",
+  "title": "Gold 22K: \u20b911,349 for 1 gram, no new rate (Sun 22 Nov, 4 PM)",
   "latest_rate": "2026-11-20 PM",
   "new_rate": false,
   "rates_saved": 8,
   "price_1_gram": 11349,
   "estimate": {
-    "made": "2026-11-22T08:57:16+05:30",
+    "made": "2026-11-22T15:57:14+05:30",
     "value": 111931,
     "low": 110811,
     "high": 113050,
@@ -38,7 +38,7 @@
     "actual": null
   },
   "forecast": {
-    "made": "2026-11-22T08:57:16+05:30",
+    "made": "2026-11-22T15:57:14+05:30",
     "target": "2026-11-27",
     "trading_days": 4.52,
     "middle": 111931,
