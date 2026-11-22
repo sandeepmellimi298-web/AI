@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "finished": "2026-11-21T05:26:16+00:00",
+  "finished": "2026-11-22T02:37:40+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
@@ -15,7 +15,7 @@
       "source": "News search 1",
       "query": "bank recruitment 2026 notification apply online when:2d",
       "ok": true,
-      "fetched": 91,
+      "fetched": 100,
       "kept": 1
     },
     {
@@ -29,46 +29,46 @@
       "source": "News search 3",
       "query": "(SBI OR IBPS OR RBI OR NABARD OR SIDBI) recruitment notification when:2d",
       "ok": true,
-      "fetched": 29,
+      "fetched": 49,
       "kept": 0
     },
     {
       "source": "News search 4",
       "query": "(\"Bank of Baroda\" OR \"Punjab National Bank\" OR \"Canara Bank\" OR \"Union Bank of India\" OR \"Indian Bank\" OR \"Bank of India\") recruitment when:2d",
       "ok": true,
-      "fetched": 26,
+      "fetched": 27,
       "kept": 0
     },
     {
       "source": "News search 5",
       "query": "(\"Central Bank of India\" OR \"UCO Bank\" OR \"Bank of Maharashtra\" OR \"Indian Overseas Bank\" OR \"Punjab & Sind Bank\" OR \"India Post Payments Bank\" OR \"Gramin Bank\") recruitment when:2d",
       "ok": true,
-      "fetched": 2,
+      "fetched": 3,
       "kept": 0
     },
     {
       "source": "News search 6",
       "query": "(\"HDFC Bank\" OR \"ICICI Bank\" OR \"Axis Bank\" OR \"Kotak Mahindra Bank\" OR \"IndusInd Bank\" OR \"IDFC FIRST Bank\" OR \"Yes Bank\") (recruitment OR hiring OR hire) when:2d",
       "ok": true,
-      "fetched": 13,
+      "fetched": 11,
       "kept": 0
     },
     {
       "source": "News search 7",
       "query": "(\"Federal Bank\" OR \"South Indian Bank\" OR \"Karur Vysya Bank\" OR \"Karnataka Bank\" OR \"City Union Bank\" OR \"J&K Bank\" OR \"IDBI Bank\" OR \"Bandhan Bank\" OR \"RBL Bank\") recruitment when:2d",
       "ok": true,
-      "fetched": 5,
+      "fetched": 6,
       "kept": 0
     },
     {
       "source": "News search 8",
       "query": "(\"small finance bank\" OR \"cooperative bank\" OR \"co-operative bank\") recruitment notification when:2d",
       "ok": true,
-      "fetched": 0,
+      "fetched": 10,
       "kept": 0
     }
   ],
-  "alert_file": "/home/runner/work/AI/AI/bank-jobs-alert/out/alert-2026-11-21.html",
+  "alert_file": "/home/runner/work/AI/AI/bank-jobs-alert/out/alert-2026-11-22.html",
   "ai": {
     "ok": false,
     "model": "phi4-mini",
