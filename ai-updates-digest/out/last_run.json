@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "finished": "2026-11-22T02:23:32+00:00",
+  "finished": "2026-11-22T09:56:34+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
@@ -17,17 +17,17 @@
       "source": "Hacker News",
       "ok": true,
       "optional": false,
-      "fetched": 5,
+      "fetched": 4,
       "kept": 4,
-      "seconds": 0.6
+      "seconds": 0.5
     },
     {
       "source": "GitHub",
       "ok": true,
       "optional": false,
-      "fetched": 69,
+      "fetched": 68,
       "kept": 12,
-      "seconds": 13.8
+      "seconds": 13.6
     },
     {
       "source": "OpenAI",
@@ -43,7 +43,7 @@
       "optional": false,
       "fetched": 20,
       "kept": 0,
-      "seconds": 0.3
+      "seconds": 0.2
     },
     {
       "source": "Google DeepMind",
@@ -51,7 +51,7 @@
       "optional": false,
       "fetched": 100,
       "kept": 0,
-      "seconds": 0.3
+      "seconds": 0.2
     },
     {
       "source": "Microsoft AI news",
@@ -107,7 +107,7 @@
       "optional": false,
       "fetched": 30,
       "kept": 1,
-      "seconds": 0.3
+      "seconds": 0.1
     },
     {
       "source": "News: Logic Apps and AI",
@@ -121,9 +121,9 @@
       "source": "News: SAP Integration Suite and AI",
       "ok": true,
       "optional": true,
-      "fetched": 4,
+      "fetched": 3,
       "kept": 1,
-      "seconds": 0.3
+      "seconds": 0.2
     },
     {
       "source": "News: TIBCO, MuleSoft and AI",
@@ -154,6 +154,6 @@
       "latest.md"
     ],
     "notes": [],
-    "seconds": 23.1
+    "seconds": 14.7
   }
 }
