@@ -1,97 +1,90 @@
-# AI Updates Digest - Saturday, 21 November 2026
+# AI Updates Digest - Sunday, 22 November 2026
 
-24 items from the last 36 hours. Items sent on earlier days are left out.
+21 items from the last 36 hours. Items sent on earlier days are left out.
 
 <!-- ai-brief:start -->
 ## AI picks
 
-1. [mdiri-ai/SoduWork](https://github.com/mdiri-ai/SoduWork): A new AI tool for teams to manage agents and tasks.
-2. [Azure-Samples/azure-search-openai-demo](https://github.com/Azure-Samples/azure-search-openai-demo): A sample app that uses Azure AI Search and OpenAI models for a ChatGPT-like conversation.
-3. [From canvas to run: a better Logic Apps Automation experience](https://techcommunity.microsoft.com/t5/azure-integration-services-blog/from-canvas-to-run-a-better-logic-apps-automation-experience/ba-p/4573879): Exploring how to improve Logic Apps workflows after initial setup.
-4. [e2b-dev/fragments](https://github.com/e2b-dev/fragments): An open-source Next.js template for AI-generated apps by E2B.
-5. [Jakeschincariol/instagram-agent-skill](https://github.com/Jakeschincariol/instagram-agent-skill)
+1. [vstorm-co/full-stack-ai-agent-template](https://github.com/vstorm-co/full-stack-ai-agent-template): A template for quickly creating a full-stack AI app with FastAPI and Next.js.
+2. [Azure/logicapps-labs](https://github.com/Azure/logicapps-labs): Learn Azure Logic Apps with hands-on labs organized by topic.
+3. [Azure-Samples/chat-with-your-data-solution-accelerator](https://github.com/Azure-Samples/chat-with-your-data-solution-accelerator): A tool to speed up building chat apps with AI in Azure.
+4. [benjitaylor/skills](https://github.com/benjitaylor/skills): A GitHub repository for AI coding agents' skills.
+5. [t3dotgg/tstack](https://github.com/t3dotgg/tstack): A GitHub tool that helps with coding using AI skills.
 
 *A small AI model (phi4-mini) picked these items by meaning and wrote the short lines. It ran on this machine, with no outside AI service. It can make mistakes, so check the links.*
 <!-- ai-brief:end -->
 
 ## In 30 seconds
-- [Frostbite: A new CPU architecture discovered, designed and verified by AI](https://architectlabs.com/blog/frostbite)
-- [Combatting adversarial distillation](https://openai.com/index/combatting-adversarial-distillation)
-- [mdiri-ai/SoduWork](https://github.com/mdiri-ai/SoduWork)
+- [Language Models Can Rewrite Their Own Weights](https://arxiv.org/abs/2611.21885)
+- [t3dotgg/tstack](https://github.com/t3dotgg/tstack)
+- [Jakeschincariol/founder-skill](https://github.com/Jakeschincariol/founder-skill)
 
 ## Releases
-- **[Combatting adversarial distillation](https://openai.com/index/combatting-adversarial-distillation)**  
-  OpenAI | 20 Nov
-  OpenAI’s layered approach to adversarial distillation combines model training, safeguards, detection, and enforcement to protect against capability extraction.
-- **[Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup](https://huggingface.co/blog/inkling2mini)**  
-  Hugging Face | 20 Nov
-- **[Hebbia sees improvements in financial research with GPT-6 Astra](https://openai.com/business/customer-stories/hebbia)**  
-  OpenAI | 20 Nov
-  Hebbia tested GPT-6 Astra for financial research. Its prerelease evaluations found gains in source coverage, citation relevance, and presentation quality.
+Nothing notable in this period.
 
 ## Trending AI tools
-- **[mdiri-ai/SoduWork](https://github.com/mdiri-ai/SoduWork)**  
-  GitHub (new and rising) | 6.1K stars | about 262 stars a day | JavaScript | MIT | created 29 Oct
-  The AI-native engine for teams and their agents. Multi-harness, multi-agent, self-hosted.
-- **[vercel-labs/ui](https://github.com/vercel-labs/ui)**  
-  GitHub (new and rising) | 6.3K stars | about 247 stars a day | TypeScript | Apache-2.0 | created 26 Oct
-  A library of behaviors for agents to build the next generation of user interfaces.
-- **[qybaihe/bla](https://github.com/qybaihe/bla)**  
-  GitHub (new and rising) | 6.3K stars | about 235 stars a day | TypeScript | MIT | created 25 Oct
-  🛡️ BLA (bla-agents / Blind LLM Agents) — Open-source Blue Defense MCP server & CLI protecting JS/TS, Electron ASAR, WASM, Python, Native Binaries, SQLite, GGUF/Safetensors &...
-- **[shanselman/gputaskman](https://github.com/shanselman/gputaskman)**  
-  GitHub (new and rising) | 3.6K stars | about 200 stars a day | Python | MIT | created 3 Nov
-  A GPU task manager for Windows, Linux, and WSL: per-process VRAM, GPU activity, and LLM model/KV-cache insights for NVIDIA, AMD, and Intel GPUs (plus Huawei Ascend on Linux).
-- **[sarpstar/cinecode](https://github.com/sarpstar/cinecode)**  
-  GitHub (new and rising) | 2.8K stars | about 158 stars a day | Python | MIT | created 3 Nov
-  Films made with code. Short films, long YouTube videos, ads, explainers and music videos: an AI coding agent writes the script, builds every frame in code, designs the sound and...
+- **[t3dotgg/tstack](https://github.com/t3dotgg/tstack)**  
+  GitHub (new and rising) | 4.3K stars | about 148 stars a day | Python | MIT | created 24 Oct
+  The agent skills I use every day. Works with Claude Code and Codex.
+- **[benjitaylor/skills](https://github.com/benjitaylor/skills)**  
+  GitHub (new and rising) | 4.0K stars | about 147 stars a day | TypeScript | created 26 Oct
+  Skills for AI coding agents.
+- **[agentes-chat/agentes-chat](https://github.com/agentes-chat/agentes-chat)**  
+  GitHub (new and rising) | 1.9K stars | about 146 stars a day | TypeScript | AGPL-3.0 | created 9 Nov
+  Open-source, self-hosted Slack alternative where your team and AI agents work together in channels and DMs. Agents run on Claude, ChatGPT/Codex, Gemini or Grok, with MCP tools...
+- **[caru-ini/stack-diagram](https://github.com/caru-ini/stack-diagram)**  
+  GitHub (new and rising) | 2.7K stars | about 129 stars a day | TypeScript | MIT | created 1 Nov
+  Agent skill: describe your stack in a sentence, get an architecture diagram with official logos
+- **[N1nEmAn/sapper-v2](https://github.com/N1nEmAn/sapper-v2)**  
+  GitHub (new and rising) | 2.5K stars | about 113 stars a day | Python | MIT | created 30 Oct
+  The first fruit of the Nüwa tree — an autonomous AI pentest legion (634-team champion, 8h unattended, 1B tokens beat 4.5B). Not just a tool: evolvable by design. Grow your own...
 
 ## What users are saying
-- **[Frostbite: A new CPU architecture discovered, designed and verified by AI](https://architectlabs.com/blog/frostbite)**  
-  Hacker News | 632 points | 328 comments | 20 Nov
-- **[Quoting Ravi Vakil](https://simonwillison.net/2026/Nov/20/ravi-vakil/)**  
-  Simon Willison | 21 Nov
-  Alessandro Masullo has a proposed proof of [Generalized Riemann Hypothesis], and Brian Conrad has been looking closely at it for months and gave extensive feedback which is being...
-- **[Restricting AI agents in mobile operating systems platforms from capturing data](https://signal.org/blog/protecting-your-privacy/)**  
-  Hacker News | 525 points | 310 comments | 20 Nov
-- **[Claude solves two open problems in the physics of black holes](https://www.anthropic.com/research/claude-black-hole-physics)**  
-  Hacker News | 553 points | 270 comments | 19 Nov
-- **[Gemini 4 Neon is the new #1 on the Models Engineering Index](https://git-aarvin.github.io/mei/)**  
-  Hacker News | 367 points | 241 comments | 20 Nov
+- **[Language Models Can Rewrite Their Own Weights](https://arxiv.org/abs/2611.21885)**  
+  Hacker News | 480 points | 141 comments | 20 Nov
+- **[Muru](https://simonwillison.net/2026/Nov/21/muru/)**  
+  Simon Willison | 22 Nov
+- **[Google workers tell their employer not to punish schools that don't want AI](https://www.motherjones.com/politics/2026/11/google-alphabet-union-school-ai-protest-gemini-workers-petition/)**  
+  Hacker News | 279 points | 228 comments | 20 Nov
+- **[Vibecoding an inference chip](https://ankitg.me/blog/vibecoding-inference-chip/)**  
+  Hacker News | 174 points | 74 comments | 20 Nov
+- **[ClawDOS – An AI coding agent for DOS](http://ricapar.net/ClawDOS/)**  
+  Hacker News | 159 points | 51 comments | 21 Nov
 
 ## Reusable code
-- **[Oldcircle/geo-sleuth](https://github.com/Oldcircle/geo-sleuth)**  
-  GitHub (new reusable code) | 7.4K stars | about 115 stars a day | Python | MIT | created 18 Sep
-  An agent skill that finds where a photo was taken — OpenStreetMap geometry, elevation skylines, satellite imagery and street view — and shows its work. Works with Claude Code...
-- **[e2b-dev/fragments](https://github.com/e2b-dev/fragments)**  
-  GitHub (popular templates) | 6.4K stars | TypeScript | Apache-2.0
-  Open-source Next.js template for building apps that are fully generated by AI. By E2B.
-- **[Jakeschincariol/instagram-agent-skill](https://github.com/Jakeschincariol/instagram-agent-skill)**  
-  GitHub (new reusable code) | 7.7K stars | about 112 stars a day | Python | MIT | created 13 Sep
-  Thirteen Claude skills that run an Instagram account: Reels off 26 scored hook formulas, a viral research skill, a caption linter, and a humanizer. Free, MIT.
-- **[getzep/zep](https://github.com/getzep/zep)**  
-  GitHub (popular templates) | 5.0K stars | Python | Apache-2.0
-  Zep | Examples, Integrations, & More
-- **[Jakeschincariol/youtube-agent-skill](https://github.com/Jakeschincariol/youtube-agent-skill)**  
-  GitHub (new reusable code) | 6.7K stars | about 101 stars a day | Python | MIT | created 16 Sep
-  Eleven Claude skills that run a YouTube channel: scripts off 21 hook formulas with a scored hook, title and thumbnail linted as one pairing, an edit decision list from your...
+- **[Jakeschincariol/founder-skill](https://github.com/Jakeschincariol/founder-skill)**  
+  GitHub (new reusable code) | 4.5K stars | about 98 stars a day | Python | MIT | created 7 Oct
+  Eleven free Claude skills that test a business before you launch it: a board trained on Hormozi, Thiel and Jobs, a marketing director, a CFO, and a consumer panel of 100 buyer...
+- **[KhazP/vibe-coding-prompt-template](https://github.com/KhazP/vibe-coding-prompt-template)**  
+  GitHub (popular templates) | 3.3K stars | TypeScript | MIT
+  Templates and workflow for generating PRDs, Tech Designs, and MVP and more using LLMs for AI IDEs
+- **[oil-oil/oil-ui](https://github.com/oil-oil/oil-ui)**  
+  GitHub (new reusable code) | 3.7K stars | about 70 stars a day | Python | MIT | created 30 Sep
+  UI design skill for Claude Code, Codex and other AI agents: explore distinct directions, compare them side by side, refine against real screenshots. 给 AI Agent 用的 UI 设计 Skill。
+- **[vstorm-co/full-stack-ai-agent-template](https://github.com/vstorm-co/full-stack-ai-agent-template)**  
+  GitHub (popular templates) | 2.0K stars | Python | MIT
+  Full-stack AI app generator — FastAPI + Next.js with AI Agents, RAG, streaming, auth, and 20+ integrations out of the box.
+- **[nanaism/yomiyasu](https://github.com/nanaism/yomiyasu)**  
+  GitHub (new reusable code) | 3.4K stars | about 65 stars a day | Python | MIT | created 30 Sep
+  AI生成の日本語を自然な日本語へ推敲するAgent Skill / Agent Skill for Refining AI-Generated Japanese into Natural Japanese
 
 ## AI for integration
-- **[From canvas to run: a better Logic Apps Automation experience](https://techcommunity.microsoft.com/t5/azure-integration-services-blog/from-canvas-to-run-a-better-logic-apps-automation-experience/ba-p/4573879)**  
-  Azure Integration Services blog | 18 Nov
-  Building a workflow is only the beginning. A few weeks later, someone needs to add an approval, change a condition, or understand why an order took an unexpected path. Those...
-- **[(Launched) Generally Available: Governance policy guidance in Foundry Canvas and VS Code](https://azure.microsoft.com/updates?id=581463)**  
+- **[Azure API Management Premium v2 now supports private CNAME records](https://techcommunity.microsoft.com/t5/azure-integration-services-blog/azure-api-management-premium-v2-now-supports-private-cname/ba-p/4575312)**  
+  Azure Integration Services blog | 21 Nov
+  We’re excited to announce support for private CNAME records in Azure API Management Premium v2, providing greater flexibility for customers deploying API gateways in private...
+- **[(In preview) Public Preview: Microsoft Copilot harness support in Foundry Toolkit for VS Code](https://azure.microsoft.com/updates?id=581468)**  
   Azure updates | 21 Nov
-  Microsoft Foundry governance guidance is now available in Foundry Canvas and the Foundry Toolkit for Visual Studio Code. As developers build agents, both experiences surface...
-- **[Best ERP and System Integration Companies in 2027: 7 Firms Compared, Teams From 250+ to 3,000+ People](https://news.google.com/rss/articles/CBMivgFBVV95cUxQRnBOTkNDUE83eFZMd2JTaWZKOEtrQXVlMDlaT3BabjIzWVRrVU8zQzUzVWJoRmM2MXN1bThKMzAyOTZyMnJIVHpZZVNDN1FNLUlNdGNjLUlxallWWWN3N1h6WnVCdlMwSkd1NzNCOUhUaVJtb0MxeVBhTExRZTRPR1MxQmlLb3hCeGdUa0pWVU0wa3gzQjBkNEprc1gwUU5CRVRPdkQyb1JXTHhfQ2g2RmRSY2EwamlFUW9vNlVR?oc=5)**  
-  TechBullion | 20 Nov
-- **[Mitsubishi Electric stock: Salesforce deal targets AI sales](https://news.google.com/rss/articles/CBMivgFBVV95cUxNRnhhaVI5MW5PWklDaGRfOWFDbE9HQjhQdkNxOFVZckpqN2ptUHpYMjZJMldUM0ZFeENtbHBLeXMteGJ6WlhDN3R2ekJoMkk4ZS14bnNiSE5TMmEyLVBmdDR6aWtfeGFwdFFId3I3MlpmV21qM3ZCT1l0aG9zRHZ3SjRBWUNFby02eFk1Z005UjZ5ZTZWMnhwLTV2Skl3Wldaa1J4MlhNNDJJX2otSm5yaXJkelZmWXVWY1JsbjJn?oc=5)**  
-  ad-hoc-news.de | 19 Nov
-- **[Azure/LogicAppsUX](https://github.com/Azure/LogicAppsUX)**  
-  GitHub (Azure Logic Apps) | 114 stars | TypeScript | MIT
-- **[Azure-Samples/azure-search-openai-demo](https://github.com/Azure-Samples/azure-search-openai-demo)**  
-  GitHub (Azure AI samples) | 7.8K stars | Python | MIT
-  A sample app for the Retrieval-Augmented Generation pattern running in Azure, using Azure AI Search for retrieval and Azure OpenAI large language models to power ChatGPT-style and...
+  Agent Builder in Microsoft Foundry Toolkit for Visual Studio Code supports prompt agents that use the Microsoft Copilot harness in public preview. Developers can configure tools...
+- **[From Emergency Services to Global Supply Chains, SAP supports ANZ Organisations To Deliver Measurable Business Transformation](https://news.google.com/rss/articles/CBMiW0FVX3lxTE90d0hkblowRjF6Z0duMGdGX2k3ZzlHVjhnc1JDNHpSNW5UbEVkaXc0VXJlR09KUmU2ckdycXhObl96TjQ4dXB0V211Qks4ektycTR6RGRjekRJRVk?oc=5)**  
+  SAP News Center | 19 Nov
+- **[Tejaswi Katta on Why 95% of IT Leaders Say Integration Is Holding Back Enterprise AI](https://news.google.com/rss/articles/CBMiswFBVV95cUxPbW9RN201dHo2REZrQTREMUFseTRsYThaVDVITGY0bnBQbFBCRWFCbTF3OS15X014bW1iZlVadV94MjhnaU9uNlJxMTg4cGwxNl9ZN3U0ZDgwOXBISU9CaHozN093S2RqX2doal9rSUg3b0lqSE8xY19hM1RfaHNWQWM2N2hsR25HbWZGYl95RTBBUlFYX3hpT05jeVFPQmNscVVvdjEwc0dmVHJsbkNWRWZuSQ?oc=5)**  
+  The Village Voice | 19 Nov
+- **[Azure/logicapps-labs](https://github.com/Azure/logicapps-labs)**  
+  GitHub (Azure Logic Apps) | 17 stars | CSS | MIT
+  Grab and go resources to learn about Azure Logic Apps. The labs are organized by topic and are designed to be hands-on, with step-by-step instructions.
+- **[Azure-Samples/chat-with-your-data-solution-accelerator](https://github.com/Azure-Samples/chat-with-your-data-solution-accelerator)**  
+  GitHub (Azure AI samples) | 1.2K stars | Python | MIT
+  A Solution Accelerator for the RAG pattern running in Azure, using Azure AI Search for retrieval and Azure OpenAI large language models to power ChatGPT-style and Q&A experiences...
 
 Sources that answered: Hacker News, GitHub, OpenAI, Google AI, Google DeepMind, Microsoft AI news, Mistral AI, Hugging Face, Anthropic news (community feed), Simon Willison, Azure Integration Services blog, Azure updates, News: Logic Apps and AI, News: SAP Integration Suite and AI, News: TIBCO, MuleSoft and AI.
 Trending does not mean trusted: read a repository before you run its code.
