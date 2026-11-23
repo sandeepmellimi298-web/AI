@@ -5,11 +5,11 @@
 <!-- ai-brief:start -->
 ## AI picks
 
-1. [Azure-Samples/AI-Gateway](https://github.com/Azure-Samples/AI-Gateway): Labs will use Azure AI Gateway to work with AI Models, MCP servers, and Agents.
-2. [RyanAlberts/best-of-Agent-Harnesses](https://github.com/RyanAlberts/best-of-Agent-Harnesses): A ranked list of AI agent tools and resources updated weekly.
+1. [Azure-Samples/AI-Gateway](https://github.com/Azure-Samples/AI-Gateway): Labs will experiment with AI models, servers, and agents using Azure's AI Gateway.
+2. [RyanAlberts/best-of-Agent-Harnesses](https://github.com/RyanAlberts/best-of-Agent-Harnesses): A ranked list of AI agent tools, templates, and resources updated weekly.
 3. [Nanako0129/sepia](https://github.com/Nanako0129/sepia): New code for improving writing skills in AI agents.
-4. [Azure/logicapps-migration-agent](https://github.com/Azure/logicapps-migration-agent): VS Code extension helps move BizTalk, MuleSoft, and other integrations to Azure Logic Apps.
-5. [Perplexity and Intelligence](https://openai.com/index/perplexity-and-intelligence): Explains how perplexity helps track AI progress and suggests a common way to judge new AI skills.
+4. [Azure/logicapps-migration-agent](https://github.com/Azure/logicapps-migration-agent): VS Code extension to move BizTalk, MuleSoft to Azure Logic Apps.
+5. [Perplexity and Intelligence](https://openai.com/index/perplexity-and-intelligence): Explains how perplexity helps measure AI progress and why it's useful for developers.
 
 *A small AI model (phi4-mini) picked these items by meaning and wrote the short lines. It ran on this machine, with no outside AI service. It can make mistakes, so check the links.*
 <!-- ai-brief:end -->
@@ -29,37 +29,37 @@
 
 ## Trending AI tools
 - **[Show HN: I built a game where you are an LLM's subagent](https://github.com/gulivan/worker755)**  
-  Hacker News | 275 points | 65 comments | 22 Nov
+  Hacker News | 321 points | 78 comments | 22 Nov
 - **[bookwjitchieni1986/blender-ai-mcp-addon](https://github.com/bookwjitchieni1986/blender-ai-mcp-addon)**  
-  GitHub (new and rising) | 2.7K stars | about 788 stars a day | MIT | created 19 Nov
+  GitHub (new and rising) | 2.8K stars | about 718 stars a day | MIT | created 19 Nov
   AI assistant and MCP server for Blender: visual chat, scene tools, multi-agent workflows. Works with ChatGPT/GPT, Claude, Gemini, Ollama, OpenCode. Blender AI addon, copilot for...
 - **[voyager-so/vork](https://github.com/voyager-so/vork)**  
-  GitHub (new and rising) | 1.7K stars | about 98 stars a day | Rust | created 6 Nov
+  GitHub (new and rising) | 1.7K stars | about 96 stars a day | Rust | created 6 Nov
   Headless 3D and VFX engine for agents. Research preview.
 - **[DenisSergeevitch/ex-ussr-kinship-research](https://github.com/DenisSergeevitch/ex-ussr-kinship-research)**  
-  GitHub (new and rising) | 2.7K stars | about 95 stars a day | Python | MIT | created 25 Oct
+  GitHub (new and rising) | 2.7K stars | about 94 stars a day | Python | MIT | created 25 Oct
   Evidence-first genealogy skill for AI agents (Codex, Claude Code): church books, civil, military, deportation and repression records across the former USSR. Replies in your...
 - **[alexeyw/lot-map](https://github.com/alexeyw/lot-map)**  
-  GitHub (new and rising) | 1.1K stars | about 84 stars a day | TypeScript | MIT | created 10 Nov
+  GitHub (new and rising) | 1.1K stars | about 82 stars a day | TypeScript | MIT | created 10 Nov
   Lot Map for Claude Code: a live map beside the chat that shows what the agent is doing. Tool calls, model steps, hooks, skills and subagents light up as they happen. Local only...
 
 ## What users are saying
 - **[87% of the Anthropic power will come from gas and 11% from coal in 2028](https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/)**  
-  Hacker News | 899 points | 899 comments | 22 Nov
+  Hacker News | 974 points | 957 comments | 22 Nov
 - **[Select Styling Specimens](https://simonwillison.net/2026/Nov/22/select-styling/)**  
   Simon Willison | 23 Nov
   Tool: Select Styling Specimens I got frustrated at how HTML boxes default to looking different in different browsers, and are (I think) quite ugly in Chrome: So I had Claude Fable...
 - **[Nasdaq erases all 2026 gains as AI sell-off dampens Anthropic’s second day](https://www.theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off)**  
-  Hacker News | 527 points | 921 comments | 20 Nov
+  Hacker News | 530 points | 924 comments | 20 Nov
 - **[llm-gemini 0.38.1](https://simonwillison.net/2026/Nov/20/llm-gemini/)**  
   Simon Willison | 20 Nov
   Release: llm-gemini 0.38.1 Gemini 4 Carbon only supports low, medium and high reasoning levels - but Gemini 4 Hydrogen and Gemini 4 Neon both have an extra xhigh level. I missed...
-- **[The Mythology of Conscious AI](https://www.noemamag.com/the-mythology-of-conscious-ai/)**  
-  Hacker News | 170 points | 484 comments | 22 Nov
+- **[A Beginner's Guide to Local AI with Inkling, Qwen, and Unsloth](https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth)**  
+  Hacker News | 529 points | 223 comments | 23 Nov
 
 ## Reusable code
 - **[Jakeschincariol/linkedin-agent-skill](https://github.com/Jakeschincariol/linkedin-agent-skill)**  
-  GitHub (new reusable code) | 3.8K stars | about 50 stars a day | Python | MIT | created 8 Sep
+  GitHub (new reusable code) | 3.9K stars | about 50 stars a day | Python | MIT | created 8 Sep
   Eleven free Claude skills that run a LinkedIn account: posts off 21 hook formulas, comments, replies, profile score, weekly plan, and a humanizer that strips the AI fingerprint...
 - **[RyanAlberts/best-of-Agent-Harnesses](https://github.com/RyanAlberts/best-of-Agent-Harnesses)**  
   GitHub (popular templates) | 1.6K stars | Python | CC-BY-SA-4.0
@@ -81,8 +81,8 @@
 - **[Retirement: Support for Azure Functions OpenAI Extension ends on April 20, 2027](https://azure.microsoft.com/updates?id=579952)**  
   Azure updates | 21 Nov
   Support for Azure Functions OpenAI extension will end on April 20, 2027. Please migrate to OpenAI, Microsoft Foundry, or Azure AI Search SDKs directly, depending on your scenario...
-- **[Salesforce Shed 20% Over The Last 30 Days: It Will Double From Here According to This Notable Wall Street Team](https://news.google.com/rss/articles/CBMi5wFBVV95cUxOLXNsQkM4aUJqUVViZmdkUGZkNzljSW5fajYxNEoyQ21YVndha1NsUnlvU3prQjE3dURjYy1Qc1VjM2p6dzZPaHB1RjE5NTZaa1o0UzdOaGRZRGg2TWRoY2V4M3I4YWxXQjJUV3FNS3hMVHNuRW5Cc1FTOHNDZmVRa0JTNGltaHczalBRU2p3WGhoZVNlOEd6ZUFCeUFXUFlGU24tNy1QaVRUeTRXTzBBWWJXa1pIaHRtVGpTa3Z3VVNtYS13d3luc091ZUNfQXRnMEVNZ1VvbXFndW1sUUpJYnNhTURhZzg?oc=5)**  
-  24/7 Wall St. | 18 Nov
+- **[Java4Shell – Critical OpenJDK Vulnerability (CVE-2026-114938)](https://news.google.com/rss/articles/CBMilAFBVV95cUxPQ2VFeU03RWZiYXJjd2ZNd2luYWh4b2lPbGMyeDQ2Y3ZLbjlyMlhiLUtRQUZiNGhHQ01xOURsRVU3QzlUZHlxR0tTU2JaN3BJRlY4RWZVV2F3d1BqNTlfT3JQNVV5NjVOclJXT01SZWdqdVU1NzJrRmtIMDluRXI4QjBCUk90MHRqRjVJYkxheDg0SzdR?oc=5)**  
+  Salesforce | 19 Nov
 - **[Azure/logicapps-migration-agent](https://github.com/Azure/logicapps-migration-agent)**  
   GitHub (Azure Logic Apps) | 12 stars | TypeScript | MIT
   VS Code Extension for migrating BizTalk, MuleSoft, and other integration platforms to Azure Logic Apps Standard
