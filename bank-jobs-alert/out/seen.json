@@ -1,5 +1,6 @@
 {
  "banks": {
+  "exim bank": "2026-11-23",
   "federal bank": "2026-11-20",
   "indian bank": "2026-11-20",
   "j&k bank": "2026-11-20",
@@ -9,6 +10,7 @@
   "state bank of india": "2026-11-20"
  },
  "items": {
+  "exim bank|manager": "2026-11-23",
   "federal bank|apprentice": "2026-11-20",
   "indian bank|1500": "2026-11-20",
   "j&k bank|1397": "2026-11-20",
