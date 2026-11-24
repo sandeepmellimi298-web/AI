@@ -16,15 +16,15 @@
   },
   "2026-11-23 PM": {
    "actual": null,
-   "high": 115886,
-   "low": 113591,
-   "made": "2026-11-24T08:57:18+05:30",
-   "move_percent": 0.25,
-   "spot_now": 3631.6,
+   "high": 115439,
+   "low": 113153,
+   "made": "2026-11-24T15:57:16+05:30",
+   "move_percent": -0.13,
+   "spot_now": 3617.6,
    "spot_then": 3622.47,
    "spread_percent": 1.0,
-   "target": "2026-11-24 AM",
-   "value": 114738
+   "target": "2026-11-24 PM",
+   "value": 114296
   }
  },
  "fixes": {
@@ -109,7 +109,7 @@
    }
   }
  },
- "last_emailed": "2026-11-23 PM|3632",
+ "last_emailed": "2026-11-23 PM|3618",
  "last_shown": "2026-11-23 PM",
  "spot_at_fix": {
   "2026-11-19 AM": 3736.02,
