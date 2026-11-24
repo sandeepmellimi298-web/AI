@@ -6,7 +6,7 @@
   "j&k bank": "2026-11-20",
   "nabard": "2026-11-20",
   "punjab national bank": "2026-11-20",
-  "sidbi": "2026-11-22",
+  "sidbi": "2026-11-24",
   "state bank of india": "2026-11-24"
  },
  "items": {
@@ -17,6 +17,7 @@
   "nabard|24": "2026-11-20",
   "punjab national bank|4847": "2026-11-20",
   "punjab national bank|8254": "2026-11-20",
+  "sidbi|6": "2026-11-24",
   "sidbi|63": "2026-11-22",
   "sidbi|68": "2026-11-21",
   "sidbi|notice": "2026-11-22",

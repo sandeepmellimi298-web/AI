@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "finished": "2026-11-24T02:37:38+00:00",
+  "finished": "2026-11-24T12:51:13+00:00",
   "python": "3.14.4",
-  "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
+  "system": "Linux-7.0.0-1016-aws-x86_64-with-glibc2.43",
   "window_hours": 36.0,
-  "total_items": 2,
+  "total_items": 3,
   "groups": {
-    "government": 2,
+    "government": 3,
     "private": 0,
     "other": 0
   },
@@ -15,7 +15,7 @@
       "source": "News search 1",
       "query": "bank recruitment 2026 notification apply online when:2d",
       "ok": true,
-      "fetched": 63,
+      "fetched": 68,
       "kept": 1
     },
     {
@@ -29,14 +29,14 @@
       "source": "News search 3",
       "query": "(SBI OR IBPS OR RBI OR NABARD OR SIDBI) recruitment notification when:2d",
       "ok": true,
-      "fetched": 36,
-      "kept": 1
+      "fetched": 42,
+      "kept": 2
     },
     {
       "source": "News search 4",
       "query": "(\"Bank of Baroda\" OR \"Punjab National Bank\" OR \"Canara Bank\" OR \"Union Bank of India\" OR \"Indian Bank\" OR \"Bank of India\") recruitment when:2d",
       "ok": true,
-      "fetched": 28,
+      "fetched": 27,
       "kept": 0
     },
     {
@@ -50,7 +50,7 @@
       "source": "News search 6",
       "query": "(\"HDFC Bank\" OR \"ICICI Bank\" OR \"Axis Bank\" OR \"Kotak Mahindra Bank\" OR \"IndusInd Bank\" OR \"IDFC FIRST Bank\" OR \"Yes Bank\") (recruitment OR hiring OR hire) when:2d",
       "ok": true,
-      "fetched": 10,
+      "fetched": 11,
       "kept": 0
     },
     {
@@ -64,7 +64,7 @@
       "source": "News search 8",
       "query": "(\"small finance bank\" OR \"cooperative bank\" OR \"co-operative bank\") recruitment notification when:2d",
       "ok": true,
-      "fetched": 1,
+      "fetched": 3,
       "kept": 0
     }
   ],
@@ -73,7 +73,7 @@
     "ok": true,
     "model": "phi4-mini",
     "ollama": "0.40.16",
-    "items": 2,
+    "items": 3,
     "picks": 2,
     "sentences": 2,
     "by_meaning": true,
@@ -84,6 +84,6 @@
       "latest.md"
     ],
     "notes": [],
-    "seconds": 8.4
+    "seconds": 13.2
   }
 }
