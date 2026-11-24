@@ -16,15 +16,15 @@
   },
   "2026-11-23 PM": {
    "actual": null,
-   "high": 115439,
-   "low": 113153,
-   "made": "2026-11-24T15:57:16+05:30",
+   "high": 115444,
+   "low": 113158,
+   "made": "2026-11-24T19:18:56+05:30",
    "move_percent": -0.13,
-   "spot_now": 3617.6,
+   "spot_now": 3617.75,
    "spot_then": 3622.47,
    "spread_percent": 1.0,
-   "target": "2026-11-24 PM",
-   "value": 114296
+   "target": "2026-11-25 AM",
+   "value": 114301
   }
  },
  "fixes": {
