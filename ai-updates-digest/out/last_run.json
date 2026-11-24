@@ -1,14 +1,14 @@
 {
   "version": "1.0",
-  "finished": "2026-11-24T02:23:34+00:00",
+  "finished": "2026-11-24T12:39:58+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
-  "total_items": 19,
+  "total_items": 18,
   "sections": {
     "releases": 5,
     "tools": 5,
-    "community": 3,
+    "community": 2,
     "code": 0,
     "integration": 6
   },
@@ -17,9 +17,9 @@
       "source": "Hacker News",
       "ok": true,
       "optional": false,
-      "fetched": 2,
-      "kept": 1,
-      "seconds": 0.6
+      "fetched": 0,
+      "kept": 0,
+      "seconds": 0.5
     },
     {
       "source": "GitHub",
@@ -27,7 +27,7 @@
       "optional": false,
       "fetched": 65,
       "kept": 7,
-      "seconds": 13.7
+      "seconds": 14.8
     },
     {
       "source": "OpenAI",
@@ -43,7 +43,7 @@
       "optional": false,
       "fetched": 20,
       "kept": 1,
-      "seconds": 0.3
+      "seconds": 0.1
     },
     {
       "source": "Google DeepMind",
@@ -51,7 +51,7 @@
       "optional": false,
       "fetched": 100,
       "kept": 1,
-      "seconds": 0.2
+      "seconds": 0.1
     },
     {
       "source": "Microsoft AI news",
@@ -59,7 +59,7 @@
       "optional": false,
       "fetched": 10,
       "kept": 0,
-      "seconds": 0.2
+      "seconds": 0.1
     },
     {
       "source": "Mistral AI",
@@ -91,15 +91,15 @@
       "optional": false,
       "fetched": 30,
       "kept": 2,
-      "seconds": 0.8
+      "seconds": 0.1
     },
     {
       "source": "Azure Integration Services blog",
       "ok": true,
       "optional": false,
       "fetched": 20,
-      "kept": 2,
-      "seconds": 0.1
+      "kept": 1,
+      "seconds": 0.9
     },
     {
       "source": "Azure updates",
@@ -107,7 +107,7 @@
       "optional": false,
       "fetched": 42,
       "kept": 1,
-      "seconds": 0.2
+      "seconds": 0.4
     },
     {
       "source": "News: Logic Apps and AI",
@@ -115,21 +115,21 @@
       "optional": true,
       "fetched": 0,
       "kept": 0,
-      "seconds": 0.3
+      "seconds": 0.2
     },
     {
       "source": "News: SAP Integration Suite and AI",
       "ok": true,
       "optional": true,
-      "fetched": 3,
-      "kept": 0,
+      "fetched": 4,
+      "kept": 1,
       "seconds": 0.2
     },
     {
       "source": "News: TIBCO, MuleSoft and AI",
       "ok": true,
       "optional": true,
-      "fetched": 6,
+      "fetched": 7,
       "kept": 1,
       "seconds": 0.3
     }
@@ -143,7 +143,7 @@
     "ok": true,
     "model": "phi4-mini",
     "ollama": "0.40.16",
-    "items": 19,
+    "items": 18,
     "picks": 5,
     "sentences": 5,
     "by_meaning": true,
@@ -154,6 +154,6 @@
       "latest.md"
     ],
     "notes": [],
-    "seconds": 22.4
+    "seconds": 29.6
   }
 }
