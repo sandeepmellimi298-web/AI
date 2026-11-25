@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "finished": "2026-11-25T02:23:32+00:00",
+  "finished": "2026-11-25T11:28:54+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
-  "total_items": 20,
+  "total_items": 21,
   "sections": {
-    "releases": 4,
+    "releases": 5,
     "tools": 5,
     "community": 5,
     "code": 0,
@@ -17,7 +17,7 @@
       "source": "Hacker News",
       "ok": true,
       "optional": false,
-      "fetched": 11,
+      "fetched": 15,
       "kept": 3,
       "seconds": 0.6
     },
@@ -27,7 +27,7 @@
       "optional": false,
       "fetched": 67,
       "kept": 7,
-      "seconds": 14.2
+      "seconds": 15.3
     },
     {
       "source": "OpenAI",
@@ -43,7 +43,7 @@
       "optional": false,
       "fetched": 20,
       "kept": 1,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "source": "Google DeepMind",
@@ -67,15 +67,15 @@
       "optional": false,
       "fetched": 94,
       "kept": 0,
-      "seconds": 0.2
+      "seconds": 0.1
     },
     {
       "source": "Hugging Face",
       "ok": true,
       "optional": false,
       "fetched": 916,
-      "kept": 1,
-      "seconds": 0.2
+      "kept": 2,
+      "seconds": 0.1
     },
     {
       "source": "Anthropic news (community feed)",
@@ -83,7 +83,7 @@
       "optional": true,
       "fetched": 290,
       "kept": 0,
-      "seconds": 0.5
+      "seconds": 0.3
     },
     {
       "source": "Simon Willison",
@@ -99,7 +99,7 @@
       "optional": false,
       "fetched": 20,
       "kept": 0,
-      "seconds": 0.2
+      "seconds": 0.1
     },
     {
       "source": "Azure updates",
@@ -115,7 +115,7 @@
       "optional": true,
       "fetched": 0,
       "kept": 0,
-      "seconds": 0.2
+      "seconds": 0.3
     },
     {
       "source": "News: SAP Integration Suite and AI",
@@ -123,13 +123,13 @@
       "optional": true,
       "fetched": 4,
       "kept": 1,
-      "seconds": 0.4
+      "seconds": 0.3
     },
     {
       "source": "News: TIBCO, MuleSoft and AI",
       "ok": true,
       "optional": true,
-      "fetched": 6,
+      "fetched": 5,
       "kept": 1,
       "seconds": 0.3
     }
@@ -143,7 +143,7 @@
     "ok": true,
     "model": "phi4-mini",
     "ollama": "0.40.16",
-    "items": 20,
+    "items": 21,
     "picks": 5,
     "sentences": 5,
     "by_meaning": true,
@@ -154,6 +154,6 @@
       "latest.md"
     ],
     "notes": [],
-    "seconds": 21.3
+    "seconds": 15.5
   }
 }
