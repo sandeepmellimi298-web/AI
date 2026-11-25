@@ -1,21 +1,10 @@
-# Bank Jobs Alert - Tuesday, 24 November 2026
+# Bank Jobs Alert - Wednesday, 25 November 2026
 
-3 new items from the last 36 hours. Items sent on earlier days are left out.
-
-<!-- ai-brief:start -->
-## AI picks
-
-1. [SBI Assistant Manager – Engineer (Fire) Recruitment 2026 - Apply Online for 17 Posts](https://news.google.com/rss/articles/CBMinwFBVV95cUxOSXRENVZkakJKRWNlRTFjYWxPcUVFdXNLYWpnQ3ZFRm1RanU0NkdDRFhQNEJKWUdyN21ZS0VKWGIwQTZpeTA5RTZGTEF6cjZzS0VkbXNNVnUzOXRwNnVDMURmZlJrekJuZnFoRVhvOHdDVDhvWTF6TlhkekhGUE9QQktNaUlELUpyS1EzeDdwcGdsNkxPSjF1NFRVdWg2NzQ?oc=5): State Bank of India hiring 17 Assistant Managers – Engineers Fire in 2026, apply online.
-2. [Government jobs 2026: Over 5,000 Vacancies in BSF, Gujarat Police, SBI, Railways and IOCL; Check eligibility and last dates](https://news.google.com/rss/articles/CBMiiwJBVV95cUxNN2FCY0NHLUhuMzRHYzFsUnlvWkNFaHI3cDJhRFpJYmJiNE03MDNUV3YyRHo3LVRab0lUZWZzS1gtekpWRjJ1U3N4X1dFY2JWcjZRUVkzZnU0bnJIa1dFcWdCazRjeHFsOE1YeW5fWDNjQVpiSkl4blhwVWdEb19EdEZXM2pETGdTUEtlMFoxN2o3YVJDWHhOeFpkZFl1SVNFaVI2U0dZb211YUgtOXlfNVc5WDl4MnZRNUdkRDZrRWVQNFFoNVdvaFYtclNQMGxfUk9MZGpWMHMwUFB3XzlrSXFJQ01xUzZLb0xzdWdiVXNGSnlrWGNzT3dYR3hHV1NWMS1wV1h0bTJjT0k?oc=5): Over 5,000 government job vacancies announced in BSF, Gujarat Police, SBI, Railways, and IOCL.
-
-*A small AI model (phi4-mini) picked these items by meaning and wrote the short lines. It ran on this machine, with no outside AI service. It can make mistakes, so check the links.*
-<!-- ai-brief:end -->
+No new bank job notices in the last 36 hours.
 
 ## Government banks
 
-- **State Bank of India**: [Government jobs 2026: Over 5,000 Vacancies in BSF, Gujarat Police, SBI, Railways and IOCL; Check eligibility and last dates](https://news.google.com/rss/articles/CBMiiwJBVV95cUxNN2FCY0NHLUhuMzRHYzFsUnlvWkNFaHI3cDJhRFpJYmJiNE03MDNUV3YyRHo3LVRab0lUZWZzS1gtekpWRjJ1U3N4X1dFY2JWcjZRUVkzZnU0bnJIa1dFcWdCazRjeHFsOE1YeW5fWDNjQVpiSkl4blhwVWdEb19EdEZXM2pETGdTUEtlMFoxN2o3YVJDWHhOeFpkZFl1SVNFaVI2U0dZb211YUgtOXlfNVc5WDl4MnZRNUdkRDZrRWVQNFFoNVdvaFYtclNQMGxfUk9MZGpWMHMwUFB3XzlrSXFJQ01xUzZLb0xzdWdiVXNGSnlrWGNzT3dYR3hHV1NWMS1wV1h0bTJjT0k?oc=5) (5,000 posts, Education Times, 23 Nov)
-- **State Bank of India**: [SBI Assistant Manager – Engineer (Fire) Recruitment 2026 - Apply Online for 17 Posts](https://news.google.com/rss/articles/CBMinwFBVV95cUxOSXRENVZkakJKRWNlRTFjYWxPcUVFdXNLYWpnQ3ZFRm1RanU0NkdDRFhQNEJKWUdyN21ZS0VKWGIwQTZpeTA5RTZGTEF6cjZzS0VkbXNNVnUzOXRwNnVDMURmZlJrekJuZnFoRVhvOHdDVDhvWTF6TlhkekhGUE9QQktNaUlELUpyS1EzeDdwcGdsNkxPSjF1NFRVdWg2NzQ?oc=5) (17 posts, FreeJobAlert.Com, 23 Nov)
-- **SIDBI**: [SIDBI Recruitment 2026: 6 Law Officer Vacancies for Assistant Manager and Manager Posts, Salary Up to ₹43 Lakh](https://news.google.com/rss/articles/CBMi7wFBVV95cUxQM2ZheF9PZmp4OThCdXlpUlRyS0tQb3ptYlUwVWdMbTd4blVLSmNlT2RsandvX2pXOGtBM081TWlKNXlRNmthOUsxLTVNUDk0OXRDNTNieXR1akYzc0ZIM3NnWm1Ra3FzeTkzaWN2czIwS2kyek10VC1EYy1LTXdXdEkza2xYdEt4RERIWjNLNGxGR3RybFhibEowelc5Sks2MzROUUtqQkV3TFI0S29KTWl0bVlVMG1aQm43dTFZdFgxaHY5cFZxaldZRF9nVFozYmM1V180SWVhSEpsbkZoaWRjbmR2VTBzSmZ2eUR6bw?oc=5) (6 posts, Legal Maestros, 24 Nov)
+No new notices.
 
 ## Private banks
 
