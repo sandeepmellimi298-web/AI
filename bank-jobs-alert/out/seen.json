@@ -1,6 +1,7 @@
 {
  "banks": {
   "bank of baroda": "2026-11-25",
+  "central bank of india": "2026-11-26",
   "exim bank": "2026-11-23",
   "federal bank": "2026-11-20",
   "indian bank": "2026-11-25",
@@ -9,11 +10,12 @@
   "nabard": "2026-11-20",
   "punjab national bank": "2026-11-20",
   "sidbi": "2026-11-24",
-  "state bank of india": "2026-11-24"
+  "state bank of india": "2026-11-26"
  },
  "items": {
   "bank of baroda|837": "2026-11-25",
   "bank of baroda|notice": "2026-11-25",
+  "central bank of india|clerk": "2026-11-26",
   "exim bank|manager": "2026-11-23",
   "federal bank|apprentice": "2026-11-20",
   "indian bank|1500": "2026-11-20",
@@ -29,6 +31,7 @@
   "sidbi|63": "2026-11-22",
   "sidbi|68": "2026-11-21",
   "sidbi|notice": "2026-11-22",
+  "state bank of india|1540": "2026-11-26",
   "state bank of india|17": "2026-11-24",
   "state bank of india|20": "2026-11-20",
   "state bank of india|5000": "2026-11-24",

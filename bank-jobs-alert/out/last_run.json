@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "finished": "2026-11-26T02:38:00+00:00",
+  "finished": "2026-11-26T11:23:26+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
-  "total_items": 0,
+  "total_items": 2,
   "groups": {
-    "government": 0,
+    "government": 2,
     "private": 0,
     "other": 0
   },
@@ -15,8 +15,8 @@
       "source": "News search 1",
       "query": "bank recruitment 2026 notification apply online when:2d",
       "ok": true,
-      "fetched": 99,
-      "kept": 0
+      "fetched": 100,
+      "kept": 1
     },
     {
       "source": "News search 2",
@@ -29,50 +29,61 @@
       "source": "News search 3",
       "query": "(SBI OR IBPS OR RBI OR NABARD OR SIDBI) recruitment notification when:2d",
       "ok": true,
-      "fetched": 30,
+      "fetched": 46,
       "kept": 0
     },
     {
       "source": "News search 4",
       "query": "(\"Bank of Baroda\" OR \"Punjab National Bank\" OR \"Canara Bank\" OR \"Union Bank of India\" OR \"Indian Bank\" OR \"Bank of India\") recruitment when:2d",
       "ok": true,
-      "fetched": 42,
-      "kept": 0
+      "fetched": 44,
+      "kept": 1
     },
     {
       "source": "News search 5",
       "query": "(\"Central Bank of India\" OR \"UCO Bank\" OR \"Bank of Maharashtra\" OR \"Indian Overseas Bank\" OR \"Punjab & Sind Bank\" OR \"India Post Payments Bank\" OR \"Gramin Bank\") recruitment when:2d",
       "ok": true,
-      "fetched": 0,
+      "fetched": 8,
       "kept": 0
     },
     {
       "source": "News search 6",
       "query": "(\"HDFC Bank\" OR \"ICICI Bank\" OR \"Axis Bank\" OR \"Kotak Mahindra Bank\" OR \"IndusInd Bank\" OR \"IDFC FIRST Bank\" OR \"Yes Bank\") (recruitment OR hiring OR hire) when:2d",
       "ok": true,
-      "fetched": 5,
+      "fetched": 8,
       "kept": 0
     },
     {
       "source": "News search 7",
       "query": "(\"Federal Bank\" OR \"South Indian Bank\" OR \"Karur Vysya Bank\" OR \"Karnataka Bank\" OR \"City Union Bank\" OR \"J&K Bank\" OR \"IDBI Bank\" OR \"Bandhan Bank\" OR \"RBL Bank\") recruitment when:2d",
       "ok": true,
-      "fetched": 7,
+      "fetched": 8,
       "kept": 0
     },
     {
       "source": "News search 8",
       "query": "(\"small finance bank\" OR \"cooperative bank\" OR \"co-operative bank\") recruitment notification when:2d",
       "ok": true,
-      "fetched": 4,
+      "fetched": 1,
       "kept": 0
     }
   ],
   "alert_file": "/home/runner/work/AI/AI/bank-jobs-alert/out/alert-2026-11-26.html",
   "ai": {
-    "ok": false,
+    "ok": true,
     "model": "phi4-mini",
-    "reason": "the digest has fewer than 2 items, so there is nothing to sort",
-    "seconds": 0.0
+    "ollama": "0.40.16",
+    "items": 2,
+    "picks": 2,
+    "sentences": 2,
+    "by_meaning": true,
+    "files": [
+      "alert-2026-11-26.html",
+      "alert-2026-11-26.md",
+      "latest.html",
+      "latest.md"
+    ],
+    "notes": [],
+    "seconds": 14.1
   }
 }
