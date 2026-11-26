@@ -97,6 +97,7 @@
 "huggingface.co/blog/ibm-research/an-indic-voice-agent-with-cuga": "2026-11-25",
 "huggingface.co/blog/inkling-2-mini-inference-hillclimb": "2026-11-26",
 "huggingface.co/blog/inkling2mini": "2026-11-21",
+"huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin": "2026-11-26",
 "huggingface.co/blog/nvidia/microduck-obstacle-avoidance": "2026-11-25",
 "lesswrong.com/posts/7wzwulp3hhyblmkfo/models-can-communicate-via-inference-servers-despite-being": "2026-11-26",
 "michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you": "2026-11-25",
@@ -110,6 +111,7 @@
 "news.google.com/rss/articles/cbmilafbvv95cuxpq2vfeu03rwziyxjjd2znd2luywh4b2lpbgmyedq2y3zlbjlymlhilutrquzinghhq01xoursrvu3qzluzhlxr0ttu2jan3bjrly4rwzvv2f3d1bqntlft3jqnvv5njvocljxt01szwdqdvu1nzjrrmtimdlurxi4qjbcuk90mhrqrjvjykxhedg0szdr?oc=5": "2026-11-23",
 "news.google.com/rss/articles/cbmipafbvv95cuxpr2rwwuhxzgo2tu5arnjsvmxtluhmqwlrbxvmc0zpbhjjwffkdxlvs2f5nffgsgf0efi1zgvjqjixrzjfq2ngrdzkb0tya1bortnosxzqnnrsa1lyzk42vg5eb0yzseroc1rlv3dvdwtiee0wd0zwmep5sk1hu00zu01jchpswwlsmnhrewjkrjdvu2g3r25zemfwztmxbmrkqtb3rg?oc=5": "2026-11-20",
 "news.google.com/rss/articles/cbmiswfbvv95cuxpbw9rn201dho2rezrqtremufsetrsythavdvitgy0bnbqbfbcrwfcbtf3os15x014bw1izlvadv94mjhnau9unljxmtg4cgwxnl9zn3u0zdgwoxbisu9cahozn093s2rqx2doal9rsug3b0lqse8xy19hm1rfahnwqwm2n2hsr25hbwzgyl95rtbbulfyx3hpt05jevfpqmnscvvvdjewc0dmvhjsbknwrwzusq?oc=5": "2026-11-22",
+"news.google.com/rss/articles/cbmitgfbvv95cuxoytvkxy1wb0gts0hiovptvvvoztrzywnmq05zbnrizw9hak55nhnoawlylwi1b21vwldjagtqa3jvvdzlbhzhmmk0c045yldjbxfkcdq0detzz1liekpsd1hkekrlq2ztr2piwjr2duxqmnf1d0e2dujxc0f2tlzeeng2zzjroxb0vvpqsfnvnhfwvxhqz1brcfl0we9yzuq0nk9oajhgv0fsclr1cmpqrewtcupdd9ibtgfbvv95cuxoytvkxy1wb0gts0hiovptvvvoztrzywnmq05zbnrizw9hak55nhnoawlylwi1b21vwldjagtqa3jvvdzlbhzhmmk0c045yldjbxfkcdq0detzz1liekpsd1hkekrlq2ztr2piwjr2duxqmnf1d0e2dujxc0f2tlzeeng2zzjroxb0vvpqsfnvnhfwvxhqz1brcfl0we9yzuq0nk9oajhgv0fsclr1cmpqrewtcupddw?oc=5": "2026-11-26",
 "news.google.com/rss/articles/cbmivgfbvv95cuxnrnhhavi5mw5pwkldagrfowfdbe9hqjhqdknxofvzckpqn2ptuhpymjzjmldum0zfeentbhblexmtegj6wlhdn3r2ekjomkk4zs14bnnise5tmmeylvbmddr6awtfegfwdffid3i3mlpmv21qm3zct1l0ag9zrhz3sjrbwunfby02efk1z005ujz5ztzwmnhwltv2skl3wldaa1j4mlhnndjjx2otsm5yaxjkelzmwxvwy1jsbjjn?oc=5": "2026-11-21",
 "news.google.com/rss/articles/cbmivgfbvv95cuxqrnbotkndue83efzmd2jtawzkoetrqxvlmdlat3babjizwvrrvu8zqzuzvwjormm2mxn1bthkmzayotzymnjivhpzzvndn1fnlulndgnjlulxallwwwn3n1h6wnvcdlmwskd1nzncouhuavjtb0mxevbhtexrztrpr1mxqmllb3hcegdua0pwvu0wa3gzqjbkneprc1gwuu5crvrpdkqyb1jxthhfq2g2rmrsy2ewamlfuw9vnlvr?oc=5": "2026-11-21",
 "news.google.com/rss/articles/cbmiw0fvx3lxte90d0hkblowrjf6z0dumgdgx2k3zzlhvjhnc1jdnhpsnw5ubevkaxc0vxjlr09kumu2ckdycxhobl96tjq4dxb0v211qks4ektyctr6rgrjekrjrvk?oc=5": "2026-11-22",
@@ -148,6 +150,7 @@
 "simonwillison.net/2026/nov/24/datasette-charts": "2026-11-24",
 "simonwillison.net/2026/nov/24/llm-inflection-points": "2026-11-25",
 "simonwillison.net/2026/nov/25/scott-aaronson": "2026-11-26",
+"simonwillison.net/2026/nov/26/sqlite3-rsync": "2026-11-26",
 "techcommunity.microsoft.com/t5/azure-integration-services-blog/announcing-general-availability-of-sql-as-a-storage-provider-for/ba-p/4574517": "2026-11-24",
 "techcommunity.microsoft.com/t5/azure-integration-services-blog/announcing-hl7-general-availability-and-mllp-connector-public/ba-p/4574174": "2026-11-20",
 "techcommunity.microsoft.com/t5/azure-integration-services-blog/announcing-semi-connected-integration-account-support-for-hybrid/ba-p/4573784": "2026-11-24",
@@ -156,5 +159,6 @@
 "techcommunity.microsoft.com/t5/azure-integration-services-blog/from-canvas-to-run-a-better-logic-apps-automation-experience/ba-p/4573879": "2026-11-21",
 "techcommunity.microsoft.com/t5/azure-integration-services-blog/rotating-credentials-in-azure-api-management/ba-p/4575478": "2026-11-23",
 "theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off": "2026-11-23",
+"theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features": "2026-11-26",
 "variety.com/2026/music/news/tidal-bans-ai-generated-music-1236956924": "2026-11-25"
 }
