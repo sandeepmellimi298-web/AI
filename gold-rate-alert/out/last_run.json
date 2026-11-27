@@ -1,6 +1,6 @@
 {
   "program": "Gold Rate Alert 1.1",
-  "finished": "2026-11-27T03:27:17+00:00",
+  "finished": "2026-11-27T10:27:17+00:00",
   "sources": [
     {
       "source": "official rates",
@@ -20,42 +20,44 @@
     }
   ],
   "total_items": 1,
-  "title": "Gold 22K: \u20b911,234 for 1 gram, \u25b2 \u20b9147 (Fri 27 Nov, 9 AM)",
+  "title": "Gold 22K: \u20b911,234 for 1 gram, no new rate (Fri 27 Nov, 4 PM)",
   "latest_rate": "2026-11-26 PM",
-  "new_rate": true,
+  "new_rate": false,
   "rates_saved": 14,
   "price_1_gram": 11234,
   "estimate": {
-    "made": "2026-11-27T08:57:17+05:30",
-    "value": 114408,
-    "low": 113264,
-    "high": 115553,
-    "move_percent": 1.84,
+    "made": "2026-11-27T15:57:17+05:30",
+    "value": 115845,
+    "low": 114686,
+    "high": 117003,
+    "move_percent": 3.12,
     "spread_percent": 1.0,
     "spot_then": 3558.94,
-    "spot_now": 3624.5,
-    "target": "2026-11-27 AM",
+    "spot_now": 3670.0,
+    "target": "2026-11-27 PM",
     "actual": null
   },
   "forecast": {
-    "made": "2026-11-27T08:57:17+05:30",
+    "made": "2026-11-27T15:57:17+05:30",
     "target": "2026-12-04",
-    "trading_days": 5.3,
-    "middle": 114408,
-    "low": 108227,
-    "high": 120942,
+    "trading_days": 5.01,
+    "middle": 115845,
+    "low": 109734,
+    "high": 122296,
     "official": 112339,
-    "chance_lower": 0.337,
+    "chance_lower": 0.234,
     "level": 0.8,
     "move_now": 1.8,
     "move_normal": 1.02,
-    "change_week": -2.5,
-    "change_month": -11.3,
-    "tested": 650,
-    "inside": 518,
-    "prices_until": "2026-11-26",
+    "change_week": -5.5,
+    "change_month": -13.2,
+    "tested": 649,
+    "inside": 517,
+    "prices_until": "2026-11-25",
     "live_total": 0,
     "live_inside": 0
   },
-  "notes": []
+  "notes": [
+    "There is no new official rate today so far. IBJA gives no rate on public holidays."
+  ]
 }
