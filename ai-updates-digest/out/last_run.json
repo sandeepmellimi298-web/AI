@@ -1,15 +1,15 @@
 {
   "version": "1.0",
-  "finished": "2026-11-27T02:23:30+00:00",
+  "finished": "2026-11-27T11:01:06+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
-  "total_items": 14,
+  "total_items": 15,
   "sections": {
     "releases": 2,
     "tools": 0,
     "community": 5,
-    "code": 1,
+    "code": 2,
     "integration": 6
   },
   "sources": [
@@ -17,17 +17,17 @@
       "source": "Hacker News",
       "ok": true,
       "optional": false,
-      "fetched": 9,
+      "fetched": 10,
       "kept": 3,
-      "seconds": 0.7
+      "seconds": 10.6
     },
     {
       "source": "GitHub",
       "ok": true,
       "optional": false,
-      "fetched": 65,
-      "kept": 3,
-      "seconds": 13.2
+      "fetched": 66,
+      "kept": 4,
+      "seconds": 14.6
     },
     {
       "source": "OpenAI",
@@ -43,7 +43,7 @@
       "optional": false,
       "fetched": 20,
       "kept": 0,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "source": "Google DeepMind",
@@ -59,7 +59,7 @@
       "optional": false,
       "fetched": 10,
       "kept": 0,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "source": "Mistral AI",
@@ -67,7 +67,7 @@
       "optional": false,
       "fetched": 94,
       "kept": 0,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "source": "Hugging Face",
@@ -75,7 +75,7 @@
       "optional": false,
       "fetched": 918,
       "kept": 2,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "source": "Anthropic news (community feed)",
@@ -83,7 +83,7 @@
       "optional": true,
       "fetched": 290,
       "kept": 0,
-      "seconds": 0.0
+      "seconds": 0.1
     },
     {
       "source": "Simon Willison",
@@ -91,7 +91,7 @@
       "optional": false,
       "fetched": 30,
       "kept": 2,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "source": "Azure Integration Services blog",
@@ -99,15 +99,15 @@
       "optional": false,
       "fetched": 20,
       "kept": 0,
-      "seconds": 0.1
+      "seconds": 1.1
     },
     {
       "source": "Azure updates",
       "ok": true,
       "optional": false,
       "fetched": 49,
-      "kept": 3,
-      "seconds": 0.1
+      "kept": 2,
+      "seconds": 0.3
     },
     {
       "source": "News: Logic Apps and AI",
@@ -115,21 +115,21 @@
       "optional": true,
       "fetched": 1,
       "kept": 0,
-      "seconds": 0.2
+      "seconds": 2.7
     },
     {
       "source": "News: SAP Integration Suite and AI",
       "ok": true,
       "optional": true,
-      "fetched": 3,
-      "kept": 0,
-      "seconds": 0.3
+      "fetched": 2,
+      "kept": 1,
+      "seconds": 0.2
     },
     {
       "source": "News: TIBCO, MuleSoft and AI",
       "ok": true,
       "optional": true,
-      "fetched": 5,
+      "fetched": 4,
       "kept": 1,
       "seconds": 0.2
     }
@@ -143,7 +143,7 @@
     "ok": true,
     "model": "phi4-mini",
     "ollama": "0.40.16",
-    "items": 14,
+    "items": 15,
     "picks": 5,
     "sentences": 5,
     "by_meaning": true,
@@ -154,6 +154,6 @@
       "latest.md"
     ],
     "notes": [],
-    "seconds": 27.2
+    "seconds": 18.7
   }
 }
