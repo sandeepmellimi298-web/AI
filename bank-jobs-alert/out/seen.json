@@ -2,7 +2,7 @@
  "banks": {
   "bank of baroda": "2026-11-25",
   "central bank of india": "2026-11-26",
-  "exim bank": "2026-11-23",
+  "exim bank": "2026-11-27",
   "federal bank": "2026-11-20",
   "indian bank": "2026-11-25",
   "j&k bank": "2026-11-25",
@@ -16,6 +16,7 @@
   "bank of baroda|837": "2026-11-25",
   "bank of baroda|notice": "2026-11-25",
   "central bank of india|clerk": "2026-11-26",
+  "exim bank|120": "2026-11-27",
   "exim bank|manager": "2026-11-23",
   "federal bank|apprentice": "2026-11-20",
   "indian bank|1500": "2026-11-20",
