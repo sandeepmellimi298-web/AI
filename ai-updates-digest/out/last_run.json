@@ -1,15 +1,15 @@
 {
   "version": "1.0",
-  "finished": "2026-11-26T11:06:46+00:00",
+  "finished": "2026-11-27T02:23:30+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
   "total_items": 14,
   "sections": {
     "releases": 2,
-    "tools": 1,
+    "tools": 0,
     "community": 5,
-    "code": 0,
+    "code": 1,
     "integration": 6
   },
   "sources": [
@@ -17,7 +17,7 @@
       "source": "Hacker News",
       "ok": true,
       "optional": false,
-      "fetched": 10,
+      "fetched": 9,
       "kept": 3,
       "seconds": 0.7
     },
@@ -25,9 +25,9 @@
       "source": "GitHub",
       "ok": true,
       "optional": false,
-      "fetched": 66,
+      "fetched": 65,
       "kept": 3,
-      "seconds": 14.3
+      "seconds": 13.2
     },
     {
       "source": "OpenAI",
@@ -43,7 +43,7 @@
       "optional": false,
       "fetched": 20,
       "kept": 0,
-      "seconds": 0.3
+      "seconds": 0.1
     },
     {
       "source": "Google DeepMind",
@@ -67,15 +67,15 @@
       "optional": false,
       "fetched": 94,
       "kept": 0,
-      "seconds": 0.2
+      "seconds": 0.1
     },
     {
       "source": "Hugging Face",
       "ok": true,
       "optional": false,
-      "fetched": 917,
+      "fetched": 918,
       "kept": 2,
-      "seconds": 0.2
+      "seconds": 0.1
     },
     {
       "source": "Anthropic news (community feed)",
@@ -83,7 +83,7 @@
       "optional": true,
       "fetched": 290,
       "kept": 0,
-      "seconds": 0.1
+      "seconds": 0.0
     },
     {
       "source": "Simon Willison",
@@ -106,16 +106,16 @@
       "ok": true,
       "optional": false,
       "fetched": 49,
-      "kept": 2,
-      "seconds": 0.2
+      "kept": 3,
+      "seconds": 0.1
     },
     {
       "source": "News: Logic Apps and AI",
       "ok": true,
       "optional": true,
       "fetched": 1,
-      "kept": 1,
-      "seconds": 0.4
+      "kept": 0,
+      "seconds": 0.2
     },
     {
       "source": "News: SAP Integration Suite and AI",
@@ -129,12 +129,12 @@
       "source": "News: TIBCO, MuleSoft and AI",
       "ok": true,
       "optional": true,
-      "fetched": 4,
+      "fetched": 5,
       "kept": 1,
-      "seconds": 0.3
+      "seconds": 0.2
     }
   ],
-  "digest_file": "/home/runner/work/AI/AI/ai-updates-digest/out/digest-2026-11-26.html",
+  "digest_file": "/home/runner/work/AI/AI/ai-updates-digest/out/digest-2026-11-27.html",
   "email": {
     "attempted": false,
     "sent": false
@@ -148,12 +148,12 @@
     "sentences": 5,
     "by_meaning": true,
     "files": [
-      "digest-2026-11-26.html",
-      "digest-2026-11-26.md",
+      "digest-2026-11-27.html",
+      "digest-2026-11-27.md",
       "latest.html",
       "latest.md"
     ],
     "notes": [],
-    "seconds": 22.8
+    "seconds": 27.2
   }
 }
