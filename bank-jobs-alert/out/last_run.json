@@ -1,12 +1,12 @@
 {
   "version": "1.0",
-  "finished": "2026-11-27T11:16:59+00:00",
+  "finished": "2026-11-28T02:37:40+00:00",
   "python": "3.14.4",
   "system": "Linux-7.0.0-1020-azure-x86_64-with-glibc2.43",
   "window_hours": 36.0,
-  "total_items": 1,
+  "total_items": 0,
   "groups": {
-    "government": 1,
+    "government": 0,
     "private": 0,
     "other": 0
   },
@@ -16,7 +16,7 @@
       "query": "bank recruitment 2026 notification apply online when:2d",
       "ok": true,
       "fetched": 100,
-      "kept": 1
+      "kept": 0
     },
     {
       "source": "News search 2",
@@ -29,21 +29,21 @@
       "source": "News search 3",
       "query": "(SBI OR IBPS OR RBI OR NABARD OR SIDBI) recruitment notification when:2d",
       "ok": true,
-      "fetched": 46,
+      "fetched": 45,
       "kept": 0
     },
     {
       "source": "News search 4",
       "query": "(\"Bank of Baroda\" OR \"Punjab National Bank\" OR \"Canara Bank\" OR \"Union Bank of India\" OR \"Indian Bank\" OR \"Bank of India\") recruitment when:2d",
       "ok": true,
-      "fetched": 44,
+      "fetched": 26,
       "kept": 0
     },
     {
       "source": "News search 5",
       "query": "(\"Central Bank of India\" OR \"UCO Bank\" OR \"Bank of Maharashtra\" OR \"Indian Overseas Bank\" OR \"Punjab & Sind Bank\" OR \"India Post Payments Bank\" OR \"Gramin Bank\") recruitment when:2d",
       "ok": true,
-      "fetched": 5,
+      "fetched": 6,
       "kept": 0
     },
     {
@@ -68,7 +68,7 @@
       "kept": 0
     }
   ],
-  "alert_file": "/home/runner/work/AI/AI/bank-jobs-alert/out/alert-2026-11-27.html",
+  "alert_file": "/home/runner/work/AI/AI/bank-jobs-alert/out/alert-2026-11-28.html",
   "ai": {
     "ok": false,
     "model": "phi4-mini",
